@@ -1,0 +1,26 @@
+.titulo {
+   text-align: center;
+   padding-top: 10px;
+   font-size: 20px;
+}
+.items {
+   text-align: center;
+   vertical-align: center;
+   font-size: 17px;
+   padding-left: 10px;
+   padding-top: 10px;
+   color: rgb(255,250,254);
+}
+.items1 {
+   text-align: left;
+   vertical-align: center;
+   font-size: 17px;
+   padding-left: 15px;
+   padding-top: 10px;
+   color: rgb(255,250,254);
+}
+.badd {
+   vertical-align: center;
+   color: rgb(255,250,254);
+   background-color: green;
+}

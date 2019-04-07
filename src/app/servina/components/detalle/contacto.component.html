@@ -1,0 +1,139 @@
+<div class="container-fluid">
+    <div class="row" >
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="width: 60rem; height: 60rem;">
+            <ng2-smart-table 
+                [settings]="settings" 
+                [source]="contactos"
+                (userRowSelect)="userRowSeleccionada($event)">
+            </ng2-smart-table>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+            <form [formGroup]="contactoForm" (ngSubmit)="onSubmit()">
+                <div class="row">
+                    <h4 class="text-primary" style="margin-left: 20px;">
+                        <input type="text" formControlName="cidContacto" class="form-control"/>
+                    </h4>
+                    <div class="form-group">
+                        <button class="btn btn-success boton">Actualizar CBU</button>
+                        <label class="resultado">{{resultado}}</label>
+                    </div>
+                </div>        
+                <div>
+                    <table class="datosContacto">
+                        <tr>
+                        <td>
+                        <div class="form-group">
+                            <label class="titulos">Nombre</label>
+                            <input type="text" formControlName="cnombre" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.cnombre.errors }" />
+                            <div *ngIf="submitted && f.cnombre.errors" class="invalid-feedback">
+                                <div *ngIf="f.cnombre.errors.required">Debe ingresar un Nombre</div>
+                            </div>
+                        </div>
+                        </td>
+                        <td>
+                        <div class="form-group">
+                            <label class="titulos">Apellido</label>
+                            <input type="text" formControlName="capellido" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.capellido.errors }" />
+                            <div *ngIf="submitted && f.capellido.errors" class="invalid-feedback">
+                                <div *ngIf="f.capellido.errors.required">Debe ingresar un Apellido</div>
+                            </div>
+                        </div>
+                        </td>
+                        <td>
+                        <div class="form-group">
+                            <label class="titulos">Dni</label>
+                            <input type="text" formControlName="cdni" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.cdni.errors }" />
+                            <div *ngIf="submitted && f.cdni.errors" class="invalid-feedback">
+                                <div *ngIf="f.cdni.errors.required">Debe ingresar un Dni</div>
+                                <div *ngIf="f.cdni.errors.pattern">Dni entre 1000000 y 99999999</div>
+                            </div>
+                        </div>
+                        </td>
+                        </tr>
+                        <tr>
+                        <td>
+                        <div class="form-group">
+                            <label class="titulos">Teléfono</label>
+                            <input type="text" formControlName="ctelefono" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.ctelefono.errors }" />
+                            <div *ngIf="submitted && f.ctelefono.errors" class="invalid-feedback">
+                                <div *ngIf="f.ctelefono.errors.required">Debe ingresar un Teléfono</div>
+                                <div *ngIf="f.ctelefono.errors.pattern">Solo números, entre 7 y 15 dígitos</div>
+                            </div>
+                        </div>
+                        </td>
+                        <td>
+                        <div class="form-group">
+                            <label class="titulos">e-Mail</label>
+                            <input type="text" formControlName="cemail" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.cemail.errors }" />
+                            <div *ngIf="submitted && f.cemail.errors" class="invalid-feedback">
+                                <div *ngIf="f.cemail.errors.required">Debe ingresar un e-Mail</div>
+                                <div *ngIf="f.cemail.errors.email">El e-Mail no es valido</div>
+                            </div>
+                        </div>
+                        </td>
+                        <td>
+                        <div class="form-group">
+                            <label class="titulos">Monto</label>
+                            <input type="text" formControlName="cmonto" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.cmonto.errors }" />
+                            <div *ngIf="submitted && f.cmonto.errors" class="invalid-feedback">
+                                <div *ngIf="f.cmonto.errors.required">Debe ingresar un monto</div>
+                                <div *ngIf="f.cmonto.errors.pattern">Entre $999 y $100.000</div>
+                            </div>
+                        </div>
+                        </td>
+                        </tr>
+                        <tr>
+                        <td>
+                        <div class="form-group">
+                            <label class="titulos">Plazo</label>
+                            <input type="text" formControlName="cplazo" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.cplazo.errors }" />
+                            <div *ngIf="submitted && f.cplazo.errors" class="invalid-feedback">
+                                <div *ngIf="f.cplazo.errors.required">Debe ingresar un plazo</div>
+                                <div *ngIf="f.cplazo.errors.pattern">Plazo entre 10 y 99 meses</div>
+                            </div>
+                        </div>
+                        </td>
+                        <td>
+                        <div class="form-group">
+                            <label class="titulos">Cbu</label>
+                            <input type="text" formControlName="ccbu" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.ccbu.errors }" />
+                            <div *ngIf="submitted && f.ccbu.errors" class="invalid-feedback">
+                                <div *ngIf="f.ccbu.errors.required">Debe ingresar un CBU</div>
+                                <div *ngIf="f.ccbu.errors.pattern">Debe ingresar 22 números</div>
+                                <div *ngIf="f.ccbu.errors.validarCbu">CBU debe ser válido</div>
+                            </div>
+                        </div>
+                        </td>
+                        <td>
+                        <div class="form-group">
+                            <label class="titulos">Fecha Ingreso</label>
+                            <input type="text" formControlName="cfechaIngreso" class="form-control" />
+                        </div>
+                        </td>
+                        </tr>
+                        <tr>
+                        <td colspan="3">
+                        <div class="form-group">
+                            <label class="titulos">Mensaje</label>
+                            <textarea rows="3" cols="70" formControlName="cmensaje" class="form-control"></textarea>
+                        </div>
+                        </td>
+                        </tr>
+                    </table>
+                </div>
+            </form>
+            <div class="row">
+                <div><button (click)="findImage('-Dni')" class="btn btn-primary boton">Dni</button></div>
+                <div><button (click)="findImage('-Sueldo1')" class="btn btn-primary boton">Sueldo1</button></div>
+                <div><button (click)="findImage('-Sueldo2')" class="btn btn-primary boton">Sueldo2</button></div>
+                <div><button (click)="findImage('-Cbu')" class="btn btn-primary boton">Cbu</button></div>
+                <div><button (click)="findImage('-Ticket')" class="btn btn-primary boton">Ticket</button></div>
+            </div>
+            <div>
+                <img [src]="imageToShow" width="800" height="520">
+            </div>
+        </div>
+    </div>
+</div>
+
+

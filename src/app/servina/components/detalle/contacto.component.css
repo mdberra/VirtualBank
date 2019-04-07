@@ -1,0 +1,25 @@
+:host /deep/ ng2-smart-table thead > tr > th  { 
+   font-size: 15px;
+   text-align: center; 
+}
+
+table tbody th, table tbody tr td .centrado {
+   font-size: 15px;
+   text-align: center; 
+}
+.datosContacto {
+   font-size: 15px;
+}
+.boton {
+   margin-left: 20px;
+}
+.botoncolor{
+   background-color: aqua;
+}
+.titulos{
+   color: green;
+}
+.resultado {
+   font-size: 15px;
+   color: blue;
+}

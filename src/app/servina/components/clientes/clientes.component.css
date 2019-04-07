@@ -1,0 +1,9 @@
+:host /deep/ ng2-smart-table thead > tr > th  { 
+   font-size: 12px;
+   text-align: center; 
+}
+
+table tbody th, table tbody tr td .centrado{
+   font-size: 12px;
+   text-align: center; 
+}

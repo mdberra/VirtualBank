@@ -1,0 +1,24 @@
+<label class="label label-primary tabla">{{ nombreApellido }}</label>
+<div class="tabla" *ngFor="let s of servicios">
+    <div class="d-flex flex-row bd-highlight mb-3">
+        <div class="p-2 bd-highlight" *ngFor="let p of periodos">
+            <ul class="list-group" *ngFor="let r of ((rows | servicioPipe: s) | periodoPipe: p)">
+                <li class="list-group-item celda">
+                    <span>{{ r.fecha | fechaPipe }} </span>
+                    <span>{{ r.importe }} </span>
+                    <span [ngClass]="(r.bancoRecaudador == 'Banco Itau')?'banco-is-itau':(
+                                (r.bancoRecaudador == 'Banco Bica')?'banco-is-bica':
+                                    'banco-is-provincia')
+                                ">{{ r.bancoRecaudador }} </span>
+                    <span [ngClass]="(r.estado == 'Rechazado')?'estado-is-rechazado':(
+                                (r.estado == 'Acreditado')?'estado-is-acreditado':(
+                                (r.estado == 'Disparado')?'estado-is-disparado':
+                                (r.estado == 'Devuelto')?'estado-is-devolucion':
+                                'estado-is-comun'))
+                                ">{{ r.estado }} </span>
+                    <span>{{ r.codigoRechazo }}</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

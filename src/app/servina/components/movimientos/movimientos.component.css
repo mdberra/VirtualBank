@@ -1,0 +1,40 @@
+.tabla{
+    font-family: sans-serif;
+    font-size: 12px;
+}
+.banco-is-bica {
+    background: rgba(122, 67, 3, 0.541);
+    color: white;
+}
+.banco-is-itau {
+    background: rgb(0, 128, 0);
+    color: white;
+}
+.banco-is-provincia {
+    background: white;
+    color: black;
+}
+.estado-is-rechazado {
+    background: rgb(143, 3, 3);
+    color: white;
+}
+.estado-is-disparado {
+    background: blue;
+    color: white;
+}
+.estado-is-acreditado {
+    background: green;
+    color: white;
+}
+.estado-is-devolucion {
+    background: black;
+    color: white;
+}
+.estado-is-comun {
+    background: white;
+    color: black;
+}
+.celda {
+    width: 300px;
+    border: 1px solid blueviolet; 
+}

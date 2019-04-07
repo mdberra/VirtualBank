@@ -1,0 +1,55 @@
+<div *ngIf="mostrar == 'Inicio'">
+    <div class="container-fluid inicio">
+        <div class="row">
+            <div class="col-5">
+                <ngb-carousel *ngIf="images">
+                    <ng-template ngbSlide *ngFor="let image of images">
+                        <img class="height:auto;" [src]="image">
+                    </ng-template>
+                </ngb-carousel>
+            </div>
+            <div class="col-7">
+                <div class="container">
+                    <div class="col-md-6 offset-md-3">
+                        <br/>
+                        <h2>Liberdina</h2>
+                        <br/>
+                        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">    
+                            <div class="form-group">
+                                <input type="text" placeholder="Tu nombre de usuario" formControlName="cusuario" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.cusuario.errors }" />
+                                <div *ngIf="submitted && f.cusuario.errors" class="invalid-feedback">
+                                    <div *ngIf="f.cusuario.errors.required">Dato necesario</div>
+                                    <div *ngIf="f.cusuario.errors.incorrecto">Nombre de usuario inexistente</div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <input type="password" placeholder="Tu clave" formControlName="cpassword" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.cpassword.errors }" />
+                                <div *ngIf="submitted && f.cpassword.errors" class="invalid-feedback">
+                                    <div *ngIf="f.cpassword.errors.required">Dato necesario</div>
+                                    <div *ngIf="f.cpassword.errors.incorrecto">Clave incorrecta</div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <button [disabled]="loading" class="btn btn-danger btn-lg active">Ingresar</button>
+                                <img *ngIf="loading" class="pl-3" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="mostrar == 'Servina'">
+    <hr class="separador"/>
+    <div class="container-fluid todo">
+        <div class="row">
+            <div class="col-1 navegacion">
+                <app-navbar></app-navbar>
+            </div>
+            <div class="col-11 panel">
+                <router-outlet></router-outlet>
+            </div>
+        </div>
+    </div>
+</div>
