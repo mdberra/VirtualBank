@@ -8,7 +8,7 @@ const APP_ROUTES: Routes = [
     { path: 'contacto', component: ContactoComponent },
     { path: 'cliente', component: ClientesComponent },
     { path: 'movimientos/:nroDoc', component: MovimientosComponent },
-    { path: 'delegacion', component: DelegacionesComponent },
+    { path: 'delegaciones', component: DelegacionesComponent },
     { path: '**', component: ContactoComponent }
 ];
 

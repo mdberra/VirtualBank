@@ -22,6 +22,7 @@ import { TableComponent } from './servina/table/table.component';
 
 // Services
 import { ContactoService } from './servina/servicios/contacto.service';
+import { DelegacionService } from './servina/servicios/delegacion.service';
 import { EstadisticaService } from "./servina/servicios/estadistica.service";
 import { DebitoService} from "./servina/servicios/debito.service";
 import { USE_VALUE } from '@angular/core/src/di/injector';
@@ -56,6 +57,7 @@ import { ServicioPipe } from './servina/pipes/servicio.pipe';
   providers: [
     { provide: LOCALE_ID, useValue: "es-Ar" },  //para que las palabras en ingles aparezcan en español
     ContactoService,
+    DelegacionService,
     NgbCarouselConfig,
     EstadisticaService,
     DebitoService

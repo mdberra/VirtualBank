@@ -1,3 +1,59 @@
-<p>
-  delegaciones works!
-</p>
+<div class="container-fluid">
+  <div class="row" >
+    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="width: 60rem; height: 60rem;">
+      <ng2-smart-table 
+          [settings]="settings" 
+          [source]="delegaciones"
+          (userRowSelect)="userRowSeleccionada($event)">
+      </ng2-smart-table>
+    </div>
+    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+      <form [formGroup]="delegacionForm" (ngSubmit)="onSubmit()">
+        <div>
+          <table class="datosDelegacion">
+            <tr>
+              <td>
+              <div class="form-group">
+                  <label class="titulos">Codigo</label>
+                  <input type="text" formControlName="ccodigo" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.ccodigo.errors }" />
+                  <div *ngIf="submitted && f.ccodigo.errors" class="invalid-feedback">
+                      <div *ngIf="f.ccodigo.errors.required">Debe ingresar un Codigo</div>
+                  </div>
+              </div>
+              </td>
+              <td>
+              <div class="form-group">
+                  <label class="titulos">Descripcion</label>
+                  <input type="text" formControlName="cdescripcion" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.cdescripcion.errors }" />
+                  <div *ngIf="submitted && f.cdescripcion.errors" class="invalid-feedback">
+                      <div *ngIf="f.cdescripcion.errors.required">Debe ingresar una Descripcion</div>
+                  </div>
+              </div>
+              </td>
+              <td>
+              <div class="form-group">
+                  <label class="titulos">Dni</label>
+                  <input type="text" formControlName="cfechaAlta" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.cfechaAlta.errors }" />
+              </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+              <div class="form-group">
+                  <label class="titulos">idBanco</label>
+                  <input type="text" formControlName="cbidBanco" class="form-control"/>
+              </div>
+              </td>
+              <td colspan="2">
+              <div class="form-group">
+                  <label class="titulos">Banco</label>
+                  <textarea rows="2" cols="50" formControlName="cbanco" class="form-control"></textarea>
+              </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
