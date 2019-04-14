@@ -21,7 +21,7 @@
                   </div>
               </div>
               </td>
-              <td>
+              <td colspan="2">
               <div class="form-group">
                   <label class="titulos">Descripcion</label>
                   <input type="text" formControlName="cdescripcion" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.cdescripcion.errors }" />
@@ -30,25 +30,70 @@
                   </div>
               </div>
               </td>
+            </tr>
+            <tr>
               <td>
               <div class="form-group">
-                  <label class="titulos">Dni</label>
-                  <input type="text" formControlName="cfechaAlta" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.cfechaAlta.errors }" />
+                  <label class="titulos">Fecha de Alta</label>
+                  <input type="text" formControlName="cfechaAlta" class="form-control" />
+              </div>
+              </td>
+              <td>
+                <div class="form-group">
+                    <label class="titulos">Estado</label>
+                    <input type="text" formControlName="cestadoDescrip" class="form-control"/>
+                </div>
+              </td>
+              <td>
+                <div class="form-group">
+                  <button class="btn btn-success boton">Actualizar Delegacion</button>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </form>
+      <hr/>
+      <form [formGroup]="bancoForm" (ngSubmit)="onSubmit()">
+        <div>
+          <table class="datosBanco">
+            <tr>
+              <td>
+              <div class="form-group">
+                  <label class="titulos">Codigo</label>
+                  <input type="text" formControlName="cbcodigo" class="form-control"/>
+              </div>
+              </td>
+              <td>
+                <div class="form-group">
+                  <label class="titulos">Descripcion</label>
+                  <input type="text" formControlName="cbcdescripcion" class="form-control"/>
+                </div>
+              </td>
+              <td>
+              <div class="form-group">
+                  <label class="titulos">Codigo Debito</label>
+                  <input type="text" formControlName="ccodigoDebito" class="form-control"/>
               </div>
               </td>
             </tr>
             <tr>
               <td>
               <div class="form-group">
-                  <label class="titulos">idBanco</label>
-                  <input type="text" formControlName="cbidBanco" class="form-control"/>
+                  <label class="titulos">DescripPrestacion</label>
+                  <input type="text" formControlName="cdescripPrestacion" class="form-control"/>
               </div>
               </td>
-              <td colspan="2">
-              <div class="form-group">
-                  <label class="titulos">Banco</label>
-                  <textarea rows="2" cols="50" formControlName="cbanco" class="form-control"></textarea>
-              </div>
+              <td>
+                <div class="form-group">
+                  <label class="titulos">Banco Recaudador</label>
+                  <input type="text" formControlName="cbancoRecaudador" class="form-control"/>
+                </div>
+              </td>      
+              <td>
+                <div class="form-group">
+                  <button class="btn btn-success boton">Actualizar Banco</button>
+                </div>
               </td>
             </tr>
           </table>

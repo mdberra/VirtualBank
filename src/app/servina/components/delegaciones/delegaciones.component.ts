@@ -25,6 +25,8 @@ export class DelegacionesComponent implements OnInit {
     
   delegacion: Delegaciones;
   delegacionForm: FormGroup;
+  bancoForm: FormGroup;
+
   submitted = false;
   resultado: string;
 
@@ -104,9 +106,18 @@ export class DelegacionesComponent implements OnInit {
         cidDelegacion: [''],
         ccodigo: ['', Validators.required],
         cdescripcion: ['', Validators.required],
-        cfechaAlta: ['', [Validators.required, Validators.email]],
+        cfechaAlta: ['', Validators.required],
+        cestadoDescrip: ['', Validators.required],
+      }, {
+        //        validator: ValidarCbu('cbu')
+      });
+    this.bancoForm = this.formBuilder.group({
         cbidBanco: ['', [Validators.required]],
-        cbanco: ['']
+        cbcodigo: ['', [Validators.required]],
+        cbdescripcion: ['', [Validators.required]],
+        cbcodigoDebito: ['', [Validators.required]],
+        cbdescripPrestacion: ['', [Validators.required]],
+        cbbancoRecaudador: ['', [Validators.required]]
     }, {
 //        validator: ValidarCbu('cbu')
     });
@@ -115,6 +126,7 @@ export class DelegacionesComponent implements OnInit {
     this.delegacionService.getDelegaciones().subscribe(
       (response: Array<object>) => {
         this.delegaciones = response;
+        console.log(this.delegaciones)
       },
       err => {
           console.log('Error en DelegacionService.getDelegaciones ' + ' Message: ' + err.message);
@@ -132,6 +144,8 @@ export class DelegacionesComponent implements OnInit {
           this.delegacionTabla.descripcion,
           this.delegacionTabla.fechaAlta,
           this.delegacionTabla.utilizar,
+          this.delegacionTabla.estadoDescrip,
+
           this.delegacionTabla.idBanco,
           this.delegacionTabla.bcodigo,
           this.delegacionTabla.bdescripcion,
@@ -141,13 +155,19 @@ export class DelegacionesComponent implements OnInit {
         );
         this.delegacionForm.controls['ccodigo'].setValue(this.delegacionTabla.codigo);
         this.delegacionForm.controls['cdescripcion'].setValue(this.delegacionTabla.descripcion);
-        this.delegacionForm.controls['cfechaAlta'].setValue(this.delegacionTabla.fechaAlta);
+        this.delegacionForm.controls['cfechaAlta'].setValue(this.changeFecha(this.delegacionTabla.fechaAlta));
+        this.delegacionForm.controls['cestadoDescrip'].setValue(this.delegacionTabla.estadoDescrip);
+
         this.delegacionForm.controls['cbidBanco'].setValue(this.delegacionTabla.idBanco);
-        this.delegacionForm.controls['cbanco'].setValue(this.delegacionTabla.bcodigo + " " + this.delegacionTabla.bdescripcion);
-    },
-    err => {
-      console.log('Error en DelegacionService.getDelegaciones ' + ' Message: ' + err.message);
-    }
+        this.delegacionForm.controls['cbcodigo'].setValue(this.delegacionTabla.bcodigo);
+        this.delegacionForm.controls['cbdescripcion'].setValue(this.delegacionTabla.bdescripcion);
+        this.delegacionForm.controls['ccodigoDebito'].setValue(this.delegacionTabla.codigoDebito);
+        this.delegacionForm.controls['cdescripPrestacion'].setValue(this.delegacionTabla.descripPrestacion);
+        this.delegacionForm.controls['cbancoRecaudador'].setValue(this.delegacionTabla.bancoRecaudador);
+      },
+      err => {
+        console.log('Error en DelegacionService.getDelegaciones ' + ' Message: ' + err.message);
+      }
     );
   }
   private changeFecha(fecha: String) : String {
@@ -178,9 +198,14 @@ export class DelegacionesComponent implements OnInit {
       this.delegacion.codigo = this.delegacionForm.controls['ccodigo'].value;
       this.delegacion.descripcion = this.delegacionForm.controls['cdescripcion'].value;
       this.delegacion.fechaAlta = this.delegacionForm.controls['cfechaAlta'].value;
-      this.delegacion.idBanco = Number(this.delegacionForm.controls['cbidBanco'].value);
-      this.delegacion.bcodigo = this.delegacionForm.controls['cbanco'].value;
+      this.delegacion.estadoDescrip = this.delegacionForm.controls['cestadoDescrip'].value;
 
+      this.delegacion.idBanco = Number(this.delegacionForm.controls['cbidBanco'].value);
+      this.delegacion.bcodigo = this.delegacionForm.controls['bccodigo'].value;
+      this.delegacion.bdescripcion = this.delegacionForm.controls['cbdescripcion'].value;
+      this.delegacion.codigoDebito = this.delegacionForm.controls['ccodigoDebito'].value;
+      this.delegacion.descripPrestacion = this.delegacionForm.controls['cdescripPrestacion'].value;
+      this.delegacion.bancoRecaudador = this.delegacionForm.controls['cbancoRecaudador'].value;
       console.log(this.delegacion);
 /**
       this.delegacionService.putDelegacion(this.delegacion).subscribe(
@@ -203,15 +228,3 @@ export class DelegacionesComponent implements OnInit {
     }
   }
 }
-
-/**
-Delegacion (Codigo, Descripcion, ID_BANCO, Habilitada)
-Banco  (Codigo, Descripcion, CodigoDebito, DescripPrestacion, BancoRecaudador)
-DiasCobro (FechaDisparo)
-
-Disparo  (id_disaparo, fecha, cantRegistros, importe)
-
-
-Pendiente de disparar
-DisparoEntidades (Identificador, Tipo, Id_Disparo = nul)
-*/

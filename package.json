@@ -20,6 +20,7 @@
     "@angular/platform-browser-dynamic": "~7.2.0",
     "@angular/router": "~7.2.0",
     "@ng-bootstrap/ng-bootstrap": "^4.1.0",
+    "@ng-select/ng-select": "^2.16.4",
     "angular-6-datatable": "^0.8.0",
     "angular-collection": "^0.5.3",
     "angular-font-awesome": "^3.1.2",

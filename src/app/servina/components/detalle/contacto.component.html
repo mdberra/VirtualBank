@@ -8,16 +8,25 @@
             </ng2-smart-table>
         </div>
         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+            <div>
+                <table class="datosContacto">
+                <tr>
+                    <td colspan="1">
+                        <label class="titulos">Estado</label>
+                    </td>
+                    <td colspan="2">
+                        <div class="row selector">
+                            <ng-select [items]="eDOptions"
+                                bindLabel="descripcion"
+                                bindValue="idEstado"
+                                [(ngModel)]="selectedEstadoContactoId">
+                            </ng-select>
+                        </div>
+                    </td>
+                </tr>
+                </table>
+            </div>
             <form [formGroup]="contactoForm" (ngSubmit)="onSubmit()">
-                <div class="row">
-                    <h4 class="text-primary" style="margin-left: 20px;">
-                        <input type="text" formControlName="cidContacto" class="form-control"/>
-                    </h4>
-                    <div class="form-group">
-                        <button class="btn btn-success boton">Actualizar CBU</button>
-                        <label class="resultado">{{resultado}}</label>
-                    </div>
-                </div>        
                 <div>
                     <table class="datosContacto">
                         <tr>
@@ -112,11 +121,31 @@
                         </td>
                         </tr>
                         <tr>
-                        <td colspan="3">
+                        <td colspan="1">
                         <div class="form-group">
                             <label class="titulos">Mensaje</label>
                             <textarea rows="3" cols="70" formControlName="cmensaje" class="form-control"></textarea>
                         </div>
+                        </td>
+ 
+                        <td>
+                        <div class="form-group">
+                            <label class="titulos">Estado</label>
+                            <div class="row selector">
+                                <ng-select [items]="eDOptions"
+                                    bindLabel="descripcion"
+                                    bindValue="idEstado"
+                                    [(ngModel)]="selectedEstadoContactoId">
+                                    formControlName="selectedId"
+                                </ng-select>
+                            </div>
+                        </div>
+                        </td> 
+
+                        <td>
+                            <div>
+                                <button class="btn btn-success boton" style="height: 70px;" >Actualizar Datos</button>
+                            </div>
                         </td>
                         </tr>
                     </table>

@@ -1,12 +1,13 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, LOCALE_ID } from '@angular/core';
 import { NgbModule, NgbCarouselConfig } from '@ng-bootstrap/ng-bootstrap';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { HttpClientModule } from '@angular/common/http';
 import { AngularFontAwesomeModule } from 'angular-font-awesome';
 import { DataTableModule } from 'angular-6-datatable';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 import { APP_ROUTING } from './app.routes';
 
@@ -49,10 +50,12 @@ import { ServicioPipe } from './servina/pipes/servicio.pipe';
   imports: [
     BrowserModule,
     NgbModule,
+    FormsModule,
     ReactiveFormsModule,
     APP_ROUTING,
     HttpClientModule,
-    Ng2SmartTableModule
+    Ng2SmartTableModule,
+    NgSelectModule
   ],
   providers: [
     { provide: LOCALE_ID, useValue: "es-Ar" },  //para que las palabras en ingles aparezcan en español

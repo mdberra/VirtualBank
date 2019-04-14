@@ -13,13 +13,14 @@ table tbody th, table tbody tr td .centrado {
 .boton {
    margin-left: 20px;
 }
-.botoncolor{
-   background-color: aqua;
-}
 .titulos{
    color: green;
 }
 .resultado {
    font-size: 15px;
    color: blue;
+}
+.selector {
+   font-size: 15px;
+   height: 30px;
 }

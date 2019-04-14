@@ -6,7 +6,6 @@ import { Contacto } from '../../model/contacto';
 
 import { ContactoService } from '../../servicios/contacto.service';
 import { EstadoDescripOption } from '../../model/estadoDescripOption';
-import { FechaPipe } from '../../pipes/fecha.pipe';
 
 import { ValidarCbu } from './validar.cbu';
 
@@ -15,14 +14,18 @@ import { ValidarCbu } from './validar.cbu';
   styleUrls: ['./contacto.component.css']
 })
 
+
 export class ContactoComponent implements OnInit {
     contactos: Array<object> = [];
     contactoTabla: any = new Object();
     keyvalues: Array<object> = [];
-    eDOptions: Array<object> = [];
+
+//    eDOptions: Array<object> = [];
+    eDOptions: EstadoDescripOption[] = [];
     estadoDescripOption: EstadoDescripOption;
+    selectedEstadoContactoId = 0;
+
     dataModel : any;
-    fechaPipe: FechaPipe;
     imageToShow: any;
     closeResult: string;
     resultado: string;
@@ -95,7 +98,6 @@ export class ContactoComponent implements OnInit {
             this.estadoDescripOption = new EstadoDescripOption(Number(kv['idEstado']), kv['descripcion']);
             this.eDOptions.push(this.estadoDescripOption);
           }
-          console.log(this.eDOptions);
           this.llenarTabla();
     },
      err => {
@@ -119,7 +121,8 @@ export class ContactoComponent implements OnInit {
         cfechaIngreso: [''],
         cestado: [''],
         cfechaEstado: [''],
-        cestadoDescrip: ['']
+        cestadoDescrip: [''],
+        selectedEstadoContactoId: ['']
     }, {
 //        validator: ValidarCbu('cbu')
     });
@@ -174,6 +177,7 @@ export class ContactoComponent implements OnInit {
         this.contactoForm.controls['cestado'].setValue(this.contactoTabla.estado);
         this.contactoForm.controls['cfechaEstado'].setValue(this.contactoTabla.fechaEstado);
         this.contactoForm.controls['cestadoDescrip'].setValue(this.contactoTabla.estadoDescrip);
+        this.selectedEstadoContactoId = this.contactoTabla.estado;
     },
     err => {
       console.log('Error en ContactoService.getContacto ' + ' Message: ' + err.message);
@@ -199,6 +203,8 @@ export class ContactoComponent implements OnInit {
   // convenience getter for easy access to form fields
   get f() { return this.contactoForm.controls; }
   onSubmit() {
+    console.log(this.eDOptions[this.selectedEstadoContactoId]);
+
       this.submitted = true;
 
       // stop here if form is invalid
