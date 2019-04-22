@@ -25,8 +25,11 @@ export class ContactoService {
 
   constructor( private httpClient: HttpClient ) {
   }
-  public getEstadoDescripOptions() {
-    return this.httpClient.get(this.url + "/api/keyvalue");
+  public getEstadoDescripOptionsGeneral() {
+    return this.httpClient.get(this.url + "/api/keyvalue/general");
+  }
+  public getEstadoDescripOptionsContacto() {
+    return this.httpClient.get(this.url + "/api/keyvalue/contacto");
   }
   public getContactos() {
     return this.httpClient.get(this.urlGetContacto + "contactos");

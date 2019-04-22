@@ -90,7 +90,7 @@ export class ContactoComponent implements OnInit {
 
   ngOnInit() {
     this.resultado = "";
-    this.contactoService.getEstadoDescripOptions().subscribe(
+    this.contactoService.getEstadoDescripOptionsContacto().subscribe(
         (response: Array<object>) => {
           this.keyvalues = response;
           this.eDOptions = [];

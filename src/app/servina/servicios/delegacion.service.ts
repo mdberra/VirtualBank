@@ -3,7 +3,8 @@ import { HttpClient, HttpHeaders} from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { of } from 'rxjs/observable/of';
-import { Delegaciones } from '../model/delegaciones';
+import { Delegacion } from '../model/delegacion';
+import { Banco } from '../model/banco';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -18,10 +19,14 @@ export class DelegacionService {
   
   private urlGetDelegacion: string = this.url + "/api/servina/delegacion/";
   private urlGetDelegaciones: string = this.url + "/api/servina/delegaciones";
-  //private urlPutDelegacion: string = this.url + "/api/pepeya/contacto";
-
+  private urlPutDelegacion: string = this.url + "/api/pepeya/delegacion";
   private idDelegacion: number;
-  private delegaciones: Delegaciones;
+  private delegaciones: Delegacion;
+
+  private urlGetBanco: string = this.url + "/api/servina/banco/";
+  private urlGetBancos: string = this.url + "/api/servina/bancos";
+  private urlPutBanco: string = this.url + "/api/pepeya/banco";
+  private idBanco: number;
 
   constructor( private httpClient: HttpClient ) {
   }
@@ -34,5 +39,11 @@ export class DelegacionService {
   }
   public setDelegacionId(idDelegacion: number) {
     this.idDelegacion = idDelegacion;
+  }
+  public getBancoId() {
+    return this.httpClient.get(this.urlGetBanco + this.idBanco);
+  }
+  public setBancoId(idBanco: number) {
+    this.idBanco = idBanco;
   }
 }

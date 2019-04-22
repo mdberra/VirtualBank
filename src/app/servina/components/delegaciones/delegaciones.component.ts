@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 
-import { Delegaciones } from '../../model/delegaciones';
+import { Delegacion } from '../../model/delegacion';
+import { Banco } from '../../model/banco';
 
 import { DelegacionService } from '../../servicios/delegacion.service';
 import { ContactoService } from '../../servicios/contacto.service';
@@ -15,16 +16,18 @@ import { FechaPipe } from '../../pipes/fecha.pipe';
 })
 
 export class DelegacionesComponent implements OnInit {
-    delegaciones: Array<object> = [];
-    delegacionTabla: any = new Object();
-    keyvalues: Array<object> = [];
-    eDOptions: Array<object> = [];
-    estadoDescripOption: EstadoDescripOption;
-    dataModel : any;
-    fechaPipe: FechaPipe;
-    
-  delegacion: Delegaciones;
+  tabla: any = new Object();
+  keyvalues: Array<object> = [];
+
+  delegaciones: Array<object> = [];
+  delegacion: Delegacion;
   delegacionForm: FormGroup;
+  optionsDeleg: any = [];
+  estadoDescripOption: EstadoDescripOption;
+
+  dataModel : any;
+  fechaPipe: FechaPipe;
+    
   bancoForm: FormGroup;
 
   submitted = false;
@@ -45,9 +48,9 @@ export class DelegacionesComponent implements OnInit {
                   return `<div class="text-center">${cell}</div>`;
                 }
       },  */
-      idDelegacion:  { title: 'Nro',       width: '5%', filter: false},
-      codigo:        { title: 'Codigo',   width: '25'},
-      descripcion:   { title: 'Descripcion',  width: '35%'},
+      idDelegacion:  { title: 'Nro', width: '5%', filter: false},
+      codigo:        { title: 'Codigo', width: '25'},
+      descripcion:   { title: 'Descripcion', width: '35%'},
 /**       fechaAlta:     { title: 'Fecha Alta', width: '10px',
         valuePrepareFunction: (fechaAlta) => { //2019-01-14T14:29:30Z
           let anio = fechaAlta.substring(0,4);
@@ -57,7 +60,7 @@ export class DelegacionesComponent implements OnInit {
           return fecha;
         }
 }, */
-      bdescripcion:   { title: 'Banco',  width: '20%'},
+      bdescripcion: { title: 'Banco', width: '20%'},
       estadoDescrip: { title: 'Estado', width: '15%'}
 /**       acciones: { title: 'Acciones', filter: false, width: '65px', type: 'custom',
                 renderComponent: ButtonViewComponent,
@@ -85,15 +88,14 @@ export class DelegacionesComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.contactoService.getEstadoDescripOptions().subscribe(
+    this.contactoService.getEstadoDescripOptionsGeneral().subscribe(
         (response: Array<object>) => {
           this.keyvalues = response;
-          this.eDOptions = [];
+          this.optionsDeleg = [];
           for(let kv of this.keyvalues) {
             this.estadoDescripOption = new EstadoDescripOption(Number(kv['idEstado']), kv['descripcion']);
-            this.eDOptions.push(this.estadoDescripOption);
+            this.optionsDeleg.push(this.estadoDescripOption);
           }
-          console.log(this.eDOptions);
           this.llenarTabla();
     },
      err => {
@@ -107,7 +109,7 @@ export class DelegacionesComponent implements OnInit {
         ccodigo: ['', Validators.required],
         cdescripcion: ['', Validators.required],
         cfechaAlta: ['', Validators.required],
-        cestadoDescrip: ['', Validators.required],
+        delegEstado: ['']
       }, {
         //        validator: ValidarCbu('cbu')
       });
@@ -115,9 +117,9 @@ export class DelegacionesComponent implements OnInit {
         cbidBanco: ['', [Validators.required]],
         cbcodigo: ['', [Validators.required]],
         cbdescripcion: ['', [Validators.required]],
-        cbcodigoDebito: ['', [Validators.required]],
-        cbdescripPrestacion: ['', [Validators.required]],
-        cbbancoRecaudador: ['', [Validators.required]]
+        ccodigoDebito: ['', [Validators.required]],
+        cdescripPrestacion: ['', [Validators.required]],
+        cbancoRecaudador: ['', [Validators.required]]
     }, {
 //        validator: ValidarCbu('cbu')
     });
@@ -126,7 +128,6 @@ export class DelegacionesComponent implements OnInit {
     this.delegacionService.getDelegaciones().subscribe(
       (response: Array<object>) => {
         this.delegaciones = response;
-        console.log(this.delegaciones)
       },
       err => {
           console.log('Error en DelegacionService.getDelegaciones ' + ' Message: ' + err.message);
@@ -137,34 +138,28 @@ export class DelegacionesComponent implements OnInit {
     this.delegacionService.setDelegacionId(idDelegacion);
     this.delegacionService.getDelegacionId().subscribe(
       data => {
-        this.delegacionTabla = data;
-        this.delegacion = new Delegaciones(
-          this.delegacionTabla.idDelegacion,
-          this.delegacionTabla.codigo,
-          this.delegacionTabla.descripcion,
-          this.delegacionTabla.fechaAlta,
-          this.delegacionTabla.utilizar,
-          this.delegacionTabla.estadoDescrip,
-
-          this.delegacionTabla.idBanco,
-          this.delegacionTabla.bcodigo,
-          this.delegacionTabla.bdescripcion,
-          this.delegacionTabla.codigoDebito,
-          this.delegacionTabla.descripPrestacion,
-          this.delegacionTabla.bancoRecaudador
+        this.tabla = data;
+        this.delegacion = new Delegacion(
+          this.tabla.idDelegacion,
+          this.tabla.codigo,
+          this.tabla.descripcion,
+          this.tabla.fechaAlta,
+          this.optionsDeleg[this.tabla.utilizar].idEstado,
+          this.optionsDeleg[this.tabla.utilizar].descripcion,
         );
-        this.delegacionForm.controls['ccodigo'].setValue(this.delegacionTabla.codigo);
-        this.delegacionForm.controls['cdescripcion'].setValue(this.delegacionTabla.descripcion);
-        this.delegacionForm.controls['cfechaAlta'].setValue(this.changeFecha(this.delegacionTabla.fechaAlta));
-        this.delegacionForm.controls['cestadoDescrip'].setValue(this.delegacionTabla.estadoDescrip);
+        this.delegacionForm.controls['ccodigo'].setValue(this.delegacion.codigo);
+        this.delegacionForm.controls['cdescripcion'].setValue(this.delegacion.descripcion);
+        this.delegacionForm.controls['cfechaAlta'].setValue(this.changeFecha(this.tabla.fechaAlta));
+        this.delegacionForm.controls['delegEstado'].setValue(this.delegacion.utilizar);
 
-        this.delegacionForm.controls['cbidBanco'].setValue(this.delegacionTabla.idBanco);
-        this.delegacionForm.controls['cbcodigo'].setValue(this.delegacionTabla.bcodigo);
-        this.delegacionForm.controls['cbdescripcion'].setValue(this.delegacionTabla.bdescripcion);
-        this.delegacionForm.controls['ccodigoDebito'].setValue(this.delegacionTabla.codigoDebito);
-        this.delegacionForm.controls['cdescripPrestacion'].setValue(this.delegacionTabla.descripPrestacion);
-        this.delegacionForm.controls['cbancoRecaudador'].setValue(this.delegacionTabla.bancoRecaudador);
-      },
+/**
+        this.bancoForm.controls['cbidBanco'].setValue(this.delegacionTabla.idBanco);
+        this.bancoForm.controls['cbcodigo'].setValue(this.delegacionTabla.bcodigo);
+        this.bancoForm.controls['cbdescripcion'].setValue(this.delegacionTabla.bdescripcion);
+        this.bancoForm.controls['ccodigoDebito'].setValue(this.delegacionTabla.codigoDebito);
+        this.bancoForm.controls['cdescripPrestacion'].setValue(this.delegacionTabla.descripPrestacion);
+        this.bancoForm.controls['cbancoRecaudador'].setValue(this.delegacionTabla.bancoRecaudador);
+ */      },
       err => {
         console.log('Error en DelegacionService.getDelegaciones ' + ' Message: ' + err.message);
       }
@@ -197,17 +192,23 @@ export class DelegacionesComponent implements OnInit {
       }
       this.delegacion.codigo = this.delegacionForm.controls['ccodigo'].value;
       this.delegacion.descripcion = this.delegacionForm.controls['cdescripcion'].value;
-      this.delegacion.fechaAlta = this.delegacionForm.controls['cfechaAlta'].value;
-      this.delegacion.estadoDescrip = this.delegacionForm.controls['cestadoDescrip'].value;
+      this.delegacion.utilizar = ((this.delegacionForm.controls['delegEstado'].value));
+      console.log(this.optionsDeleg);
+      console.log(this.delegacionForm.controls['delegEstado'].value);
 
-      this.delegacion.idBanco = Number(this.delegacionForm.controls['cbidBanco'].value);
-      this.delegacion.bcodigo = this.delegacionForm.controls['bccodigo'].value;
-      this.delegacion.bdescripcion = this.delegacionForm.controls['cbdescripcion'].value;
-      this.delegacion.codigoDebito = this.delegacionForm.controls['ccodigoDebito'].value;
-      this.delegacion.descripPrestacion = this.delegacionForm.controls['cdescripPrestacion'].value;
-      this.delegacion.bancoRecaudador = this.delegacionForm.controls['cbancoRecaudador'].value;
+      this.optionsDeleg
+
+//      this.delegacion.estadoDescrip = this.optionsDeleg(this.delegacionForm.controls['delegEstado'].value);
       console.log(this.delegacion);
-/**
+
+      /**
+      this.delegacion.idBanco = Number(this.bancoForm.controls['cbidBanco'].value);
+      this.delegacion.bcodigo = this.bancoForm.controls['bccodigo'].value;
+      this.delegacion.bdescripcion = this.bancoForm.controls['cbdescripcion'].value;
+      this.delegacion.codigoDebito = this.bancoForm.controls['ccodigoDebito'].value;
+      this.delegacion.descripPrestacion = this.bancoForm.controls['cdescripPrestacion'].value;
+      this.delegacion.bancoRecaudador = this.bancoForm.controls['cbancoRecaudador'].value;
+
       this.delegacionService.putDelegacion(this.delegacion).subscribe(
         response => {
           console.log("putContacto " + response);

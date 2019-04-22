@@ -39,9 +39,17 @@
               </div>
               </td>
               <td>
-                <div class="form-group">
-                    <label class="titulos">Estado</label>
-                    <input type="text" formControlName="cestadoDescrip" class="form-control"/>
+                <div class="form-group">  
+                  <label class="titulos" for="delegEstado">Estado</label>
+                  <div class="selector">
+                    <ng-select id="delegEstado" formControlName="delegEstado" class="form-control"
+                      [items]="optionsDeleg"
+                      bindLabel="descripcion"
+                      bindValue="idEstado"
+                      [clearable]="false"
+                      [virtualScroll]="true">
+                    </ng-select>
+                  </div>
                 </div>
               </td>
               <td>
@@ -67,7 +75,7 @@
               <td>
                 <div class="form-group">
                   <label class="titulos">Descripcion</label>
-                  <input type="text" formControlName="cbcdescripcion" class="form-control"/>
+                  <input type="text" formControlName="cbdescripcion" class="form-control"/>
                 </div>
               </td>
               <td>
