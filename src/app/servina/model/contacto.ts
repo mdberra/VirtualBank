@@ -12,7 +12,7 @@ export class Contacto {
         public cbu: string,
         public idImagen: number,
         public fechaIngreso: Date,
-        public estado: string,
+        public estado: number,
         public fechaEstado: Date,
         public estadoDescrip: string
    ) {

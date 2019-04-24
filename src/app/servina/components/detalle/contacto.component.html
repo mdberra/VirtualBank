@@ -8,24 +8,6 @@
             </ng2-smart-table>
         </div>
         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-            <div>
-                <table class="datosContacto">
-                <tr>
-                    <td colspan="1">
-                        <label class="titulos">Estado</label>
-                    </td>
-                    <td colspan="2">
-                        <div class="row selector">
-                            <ng-select [items]="eDOptions"
-                                bindLabel="descripcion"
-                                bindValue="idEstado"
-                                [(ngModel)]="selectedEstadoContactoId">
-                            </ng-select>
-                        </div>
-                    </td>
-                </tr>
-                </table>
-            </div>
             <form [formGroup]="contactoForm" (ngSubmit)="onSubmit()">
                 <div>
                     <table class="datosContacto">
@@ -129,14 +111,15 @@
                         </td>
  
                         <td>
-                        <div class="form-group">
-                            <label class="titulos">Estado</label>
+                        <div class="form-group">  
+                            <label class="titulos" for="cestado">Estado</label>
                             <div class="row selector">
-                                <ng-select [items]="eDOptions"
-                                    bindLabel="descripcion"
-                                    bindValue="idEstado"
-                                    [(ngModel)]="selectedEstadoContactoId">
-                                    formControlName="selectedId"
+                                <ng-select id="cestado" formControlName="cestado" class="form-control"
+                                [items]="optionsEstado"
+                                bindLabel="descripcion"
+                                bindValue="idEstado"
+                                [clearable]="false"
+                                [virtualScroll]="true">
                                 </ng-select>
                             </div>
                         </div>

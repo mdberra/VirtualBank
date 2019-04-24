@@ -5,7 +5,7 @@ export class Banco {
       public descripcion: string,
       public codigoDebito: number,
       public descripPrestacion: string,
-      public bancoRecaudador: string,
+      public bancoRecaudador: string
    ) {
    }
 }

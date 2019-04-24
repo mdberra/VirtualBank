@@ -1,14 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDateStruct, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
 
 import { Delegacion } from '../../model/delegacion';
 import { Banco } from '../../model/banco';
 
 import { DelegacionService } from '../../servicios/delegacion.service';
 import { ContactoService } from '../../servicios/contacto.service';
-import { EstadoDescripOption } from '../../model/estadoDescripOption';
+import { EstadoOptions } from '../../model/estadoOptions';
 import { FechaPipe } from '../../pipes/fecha.pipe';
+import { DiasCobro } from '../../model/diasCobro';
 
 @Component({
   templateUrl: './delegaciones.component.html',
@@ -18,14 +20,13 @@ import { FechaPipe } from '../../pipes/fecha.pipe';
 export class DelegacionesComponent implements OnInit {
   tabla: any = new Object();
   keyvalues: Array<object> = [];
+  estadoOptions = new EstadoOptions();
 
   delegaciones: Array<object> = [];
   delegacion: Delegacion;
   delegacionForm: FormGroup;
   optionsDeleg: any = [];
-  estadoDescripOption: EstadoDescripOption;
-
-  dataModel : any;
+  
   fechaPipe: FechaPipe;
     
   bancoForm: FormGroup;
@@ -80,28 +81,68 @@ export class DelegacionesComponent implements OnInit {
     }
   };
 
+  diaCobro: NgbDateStruct;
+  diasDeCobroTabla: Array<object> = [];
+  diasCobro: DiasCobro;
+  setDdc = {
+    actions: {
+      columnTitle: "Acciones",
+      add: false,
+      edit: false,
+      delete: false,
+      position: "right"
+    },
+    columns: {
+      idDiasCobro:  { title: 'Nro', width: '5%', filter: false},
+      fechaAlta: { title: 'Fecha', width: '80px', filter: false,
+        valuePrepareFunction: (fechaAlta) => { //2019-01-14T14:29:30Z
+          let anio = fechaAlta.substring(0,4);
+          let mes  = fechaAlta.substring(5,7);
+          let dia  = fechaAlta.substring(8,10);
+          let fecha = new String(dia + "/" + mes + "/" + anio) ;
+          return fecha;
+        }
+      }
+/**       acciones: { title: 'Acciones', filter: false, width: '65px', type: 'custom',
+                renderComponent: ButtonViewComponent,
+                (instance) {
+                  instance.save.subscribe(row => {
+                    alert('Apretando botones');
+                  });
+                }
+      } */
+    },
+    pager: {
+      display: true,
+      perPage: 10
+    },
+    attr: {
+      class: 'table table-striped table-hover'
+    }    
+  };
+
   constructor(
       private contactoService: ContactoService,
       private delegacionService: DelegacionService,
-      private formBuilder: FormBuilder
+      private formBuilder: FormBuilder,
+      private calendar: NgbCalendar
       ) {
   }
 
   ngOnInit() {
-    this.contactoService.getEstadoDescripOptionsGeneral().subscribe(
-        (response: Array<object>) => {
-          this.keyvalues = response;
-          this.optionsDeleg = [];
-          for(let kv of this.keyvalues) {
-            this.estadoDescripOption = new EstadoDescripOption(Number(kv['idEstado']), kv['descripcion']);
-            this.optionsDeleg.push(this.estadoDescripOption);
-          }
-          this.llenarTabla();
-    },
-     err => {
-       console.log('Error en ContactoService.getContacto ' + ' Message: ' + err.message);
-     }
-    );
+    if(this.estadoOptions.getLenght() == 0) {
+      this.contactoService.getEstadoDescripOptionsGeneral().subscribe( (response: Array<object>) => {
+        this.keyvalues = response;
+        this.estadoOptions.setEstadosKV(this.keyvalues);
+
+        this.optionsDeleg =  this.estadoOptions.getEstados();
+        this.llenarTabla();
+      },
+      err => {
+        console.log('Error en ContactoService.getEstadoDescripOptionsGeneral() ' + ' Message: ' + err.message);
+      }
+      );
+    }
 //    this.getDelegacionView(1);
 
     this.delegacionForm = this.formBuilder.group({
@@ -114,12 +155,12 @@ export class DelegacionesComponent implements OnInit {
         //        validator: ValidarCbu('cbu')
       });
     this.bancoForm = this.formBuilder.group({
-        cbidBanco: ['', [Validators.required]],
-        cbcodigo: ['', [Validators.required]],
-        cbdescripcion: ['', [Validators.required]],
-        ccodigoDebito: ['', [Validators.required]],
-        cdescripPrestacion: ['', [Validators.required]],
-        cbancoRecaudador: ['', [Validators.required]]
+        cidBanco: [''],
+        ccodigo: [''],
+        cdescripcion: [''],
+        ccodigoDebito: [''],
+        cdescripPrestacion: [''],
+        cbancoRecaudador: ['']
     }, {
 //        validator: ValidarCbu('cbu')
     });
@@ -144,22 +185,42 @@ export class DelegacionesComponent implements OnInit {
           this.tabla.codigo,
           this.tabla.descripcion,
           this.tabla.fechaAlta,
-          this.optionsDeleg[this.tabla.utilizar].idEstado,
-          this.optionsDeleg[this.tabla.utilizar].descripcion,
+          this.estadoOptions.getEstadoId(this.tabla.utilizar)[0].idEstado,
+          this.estadoOptions.getEstadoId(this.tabla.utilizar)[0].descripcion
         );
         this.delegacionForm.controls['ccodigo'].setValue(this.delegacion.codigo);
         this.delegacionForm.controls['cdescripcion'].setValue(this.delegacion.descripcion);
         this.delegacionForm.controls['cfechaAlta'].setValue(this.changeFecha(this.tabla.fechaAlta));
-        this.delegacionForm.controls['delegEstado'].setValue(this.delegacion.utilizar);
-
-/**
-        this.bancoForm.controls['cbidBanco'].setValue(this.delegacionTabla.idBanco);
-        this.bancoForm.controls['cbcodigo'].setValue(this.delegacionTabla.bcodigo);
-        this.bancoForm.controls['cbdescripcion'].setValue(this.delegacionTabla.bdescripcion);
-        this.bancoForm.controls['ccodigoDebito'].setValue(this.delegacionTabla.codigoDebito);
-        this.bancoForm.controls['cdescripPrestacion'].setValue(this.delegacionTabla.descripPrestacion);
-        this.bancoForm.controls['cbancoRecaudador'].setValue(this.delegacionTabla.bancoRecaudador);
- */      },
+        this.delegacionForm.controls['delegEstado'].setValue(this.estadoOptions.getEstadoId(this.delegacion.utilizar)[0].idEstado);
+// Banco
+        this.delegacionService.setBancoId(this.tabla.idBanco);
+        this.delegacionService.getBancoId().subscribe(
+          data => {
+            this.tabla = data;
+            this.bancoForm.controls['cidBanco'].disable();
+            this.bancoForm.controls['cidBanco'].setValue(this.tabla.idBanco);
+            this.bancoForm.controls['ccodigo'].disable();
+            this.bancoForm.controls['ccodigo'].setValue(this.tabla.codigo);
+            this.bancoForm.controls['cdescripcion'].disable();
+            this.bancoForm.controls['cdescripcion'].setValue(this.tabla.descripcion);
+            this.bancoForm.controls['ccodigoDebito'].disable();
+            this.bancoForm.controls['ccodigoDebito'].setValue(this.tabla.codigoDebito);
+            this.bancoForm.controls['cdescripPrestacion'].disable();
+            this.bancoForm.controls['cdescripPrestacion'].setValue(this.tabla.descripPrestacion);
+            this.bancoForm.controls['cbancoRecaudador'].disable();
+            this.bancoForm.controls['cbancoRecaudador'].setValue(this.tabla.bancoRecaudador);
+          },
+          err => {
+            console.log('Error en DelegacionService.getBanco ' + ' Message: ' + err.message);
+        });
+        this.delegacionService.getDiasCobroDelegacion().subscribe(
+          (response: Array<object>) => {
+            this.diasDeCobroTabla = response;
+          },
+          err => {
+            console.log('Error en DelegacionService.getDiasCobroDelegacion ' + ' Message: ' + err.message);
+        });
+      },
       err => {
         console.log('Error en DelegacionService.getDelegaciones ' + ' Message: ' + err.message);
       }
@@ -192,32 +253,37 @@ export class DelegacionesComponent implements OnInit {
       }
       this.delegacion.codigo = this.delegacionForm.controls['ccodigo'].value;
       this.delegacion.descripcion = this.delegacionForm.controls['cdescripcion'].value;
+
       this.delegacion.utilizar = ((this.delegacionForm.controls['delegEstado'].value));
-      console.log(this.optionsDeleg);
-      console.log(this.delegacionForm.controls['delegEstado'].value);
-
-      this.optionsDeleg
-
-//      this.delegacion.estadoDescrip = this.optionsDeleg(this.delegacionForm.controls['delegEstado'].value);
-      console.log(this.delegacion);
-
-      /**
-      this.delegacion.idBanco = Number(this.bancoForm.controls['cbidBanco'].value);
-      this.delegacion.bcodigo = this.bancoForm.controls['bccodigo'].value;
-      this.delegacion.bdescripcion = this.bancoForm.controls['cbdescripcion'].value;
-      this.delegacion.codigoDebito = this.bancoForm.controls['ccodigoDebito'].value;
-      this.delegacion.descripPrestacion = this.bancoForm.controls['cdescripPrestacion'].value;
-      this.delegacion.bancoRecaudador = this.bancoForm.controls['cbancoRecaudador'].value;
-
+      this.delegacion.estadoDescrip = this.estadoOptions.getEstadoId(this.delegacionForm.controls['delegEstado'].value)[0].descripcion;
       this.delegacionService.putDelegacion(this.delegacion).subscribe(
         response => {
-          console.log("putContacto " + response);
           this.resultado = "Actualización exitosa";
           this.llenarTabla();
         }, err => {
           this.resultado = err.message;
         }
-      ); */
+      );
+  }
+  agregarDia() {
+//    this.diaCobro = this.calendar.getToday();
+    var fecha = new Date(this.diaCobro.year, this.diaCobro.month-1, this.diaCobro.day);
+    console.log(fecha);
+    console.log(fecha.toString());
+    this.delegacionService.postDiasCobro(fecha.toString()).subscribe(
+      response => {
+        this.resultado = "Actualización exitosa";
+        this.llenarTabla();
+      }, err => {
+        this.resultado = err.message;
+      }
+    );
+
+  }
+  ddcRowSeleccionada(event) {
+    if(event.isSelected) {
+      console.log((event.data['fecha']));
+    }
   }
   private getDismissReason(reason: any): string {
     if (reason === ModalDismissReasons.ESC) {

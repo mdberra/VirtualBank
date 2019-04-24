@@ -5,7 +5,7 @@ export class Delegacion {
       public descripcion: string,
       public fechaAlta: Date,
       public utilizar: number,
-      public estadoDescrip: string,
+      public estadoDescrip: string
    ) {
    }
 }

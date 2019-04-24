@@ -13,7 +13,7 @@ export class AppComponent implements OnInit {
   title = 'Servina';
   mostrar = 'Inicio';
   user: User;
-  publicIP: string;
+  publicIP: string = "";
 
   images = ['assets/img/naturaleza-1.png', 'assets/img/naturaleza-2.png', 'assets/img/naturaleza-3.png',
             'assets/img/naturaleza-4.png', 'assets/img/naturaleza-5.png', 'assets/img/naturaleza-6.png'];
@@ -36,11 +36,6 @@ export class AppComponent implements OnInit {
       cusuario: ['', Validators.required],
       cpassword: ['', Validators.required]
     });
-    this.http.get('http://freegeoip.net/json/?callback').subscribe(
-      data => {
-        this.publicIP = data['ip'];
-      }
-    );
   }
   get f() { return this.loginForm.controls; }
   onSubmit() {
@@ -55,7 +50,7 @@ export class AppComponent implements OnInit {
                           new Date(),
                           this.publicIP
     );
-    console.log(this.user);
+//    console.log(this.user);
     if(this.user.usuario == 'servina') {
       this.mostrar = "Servina";
     }

@@ -1,37 +1,41 @@
 :host /deep/ ng2-smart-table thead > tr > th  { 
-    font-size: 15px;
-    text-align: center; 
- }
- 
- table tbody th, table tbody tr td .centrado {
-    font-size: 15px;
-    text-align: center; 
- }
- .datosDelegacion {
+   font-size: 15px;
+   text-align: center; 
+}
+
+table tbody th, table tbody tr td .centrado {
+   font-size: 15px;
+   text-align: center; 
+}
+.titulosGen{
+   font-size: 15px;
+   color: blue;
+}
+.datosDelegacion {
    margin-top: 7px;
    font-size: 15px;
- }
- .datosBanco {
+}
+.datosBanco {
    margin-top: 7px;
    font-size: 15px;
- }
- .boton {
-    margin-left: 20px;
-    height: 60px;
-    color: green;
-    background-color: aliceblue;
- }
- .botoncolor{
-    background-color: aqua;
- }
- .titulos{
-    color: green;
- }
- .resultado {
-    font-size: 15px;
-    color: blue;
- }
- .overflow-box {
+}
+.boton {
+   margin-left: 20px;
+   height: 60px;
+   color: green;
+   background-color: aliceblue;
+}
+.botoncolor{
+   background-color: aqua;
+}
+.titulos{
+   color: green;
+}
+.resultado {
+   font-size: 15px;
+   color: blue;
+}
+.overflow-box {
    width: 300px;
    padding: 5px;
    height: 100px;

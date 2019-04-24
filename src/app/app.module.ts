@@ -19,7 +19,6 @@ import { ClientesComponent } from './servina/components/clientes/clientes.compon
 import { ButtonViewComponent } from './servina/components/clientes/ButtonViewComponent';
 import { MovimientosComponent } from './servina/components/movimientos/movimientos.component';
 import { DelegacionesComponent } from './servina/components/delegaciones/delegaciones.component';
-import { TableComponent } from './servina/table/table.component';
 
 // Services
 import { ContactoService } from './servina/servicios/contacto.service';
@@ -44,8 +43,7 @@ import { ServicioPipe } from './servina/pipes/servicio.pipe';
     ClientesComponent,
     ButtonViewComponent,
     MovimientosComponent,
-    DelegacionesComponent,
-    TableComponent
+    DelegacionesComponent
   ],
   imports: [
     BrowserModule,
@@ -58,13 +56,15 @@ import { ServicioPipe } from './servina/pipes/servicio.pipe';
     NgSelectModule
   ],
   providers: [
-    { provide: LOCALE_ID, useValue: "es-Ar" },  //para que las palabras en ingles aparezcan en español
+//    { provide: LOCALE_ID, useValue: "es-Ar" },  //para que las palabras en ingles aparezcan en español
     ContactoService,
     DelegacionService,
     NgbCarouselConfig,
     EstadisticaService,
     DebitoService
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [
+    AppComponent
+  ]
 })
 export class AppModule { }

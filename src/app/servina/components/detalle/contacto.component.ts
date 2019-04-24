@@ -5,7 +5,7 @@ import { NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 import { Contacto } from '../../model/contacto';
 
 import { ContactoService } from '../../servicios/contacto.service';
-import { EstadoDescripOption } from '../../model/estadoDescripOption';
+import { EstadoOptions } from '../../model/estadoOptions';
 
 import { ValidarCbu } from './validar.cbu';
 
@@ -19,10 +19,10 @@ export class ContactoComponent implements OnInit {
     contactos: Array<object> = [];
     contactoTabla: any = new Object();
     keyvalues: Array<object> = [];
+    estadoOptions = new EstadoOptions();
 
-//    eDOptions: Array<object> = [];
-    eDOptions: EstadoDescripOption[] = [];
-    estadoDescripOption: EstadoDescripOption;
+    optionsEstado: any = [];
+    
     selectedEstadoContactoId = 0;
 
     dataModel : any;
@@ -89,21 +89,18 @@ export class ContactoComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.resultado = "";
-    this.contactoService.getEstadoDescripOptionsContacto().subscribe(
-        (response: Array<object>) => {
-          this.keyvalues = response;
-          this.eDOptions = [];
-          for(let kv of this.keyvalues) {
-            this.estadoDescripOption = new EstadoDescripOption(Number(kv['idEstado']), kv['descripcion']);
-            this.eDOptions.push(this.estadoDescripOption);
-          }
-          this.llenarTabla();
-    },
-     err => {
-       console.log('Error en ContactoService.getContacto ' + ' Message: ' + err.message);
-     }
-    );
+    if(this.estadoOptions.getLenght() == 0) {
+      this.contactoService.getEstadoDescripOptionsContacto().subscribe( (response: Array<object>) => {
+        this.keyvalues = response;
+        this.estadoOptions.setEstadosKV(this.keyvalues);
+
+        this.optionsEstado =  this.estadoOptions.getEstados();
+        this.llenarTabla();
+      },
+      err => {
+        console.log('Error en ContactoService.getContacto ' + ' Message: ' + err.message);
+      }
+    )};
     this.getContactoView(1);
 
     this.contactoForm = this.formBuilder.group({
@@ -140,7 +137,6 @@ export class ContactoComponent implements OnInit {
   private getContactoView(idContacto: number) {
     let reader = new FileReader();
     this.imageToShow = reader.result;   //blank
-
     this.contactoService.setContactoId(idContacto);
     this.contactoService.getContactoId().subscribe(
       data => {
@@ -158,9 +154,9 @@ export class ContactoComponent implements OnInit {
           this.contactoTabla.cbu,
           this.contactoTabla.idImagen,
           this.contactoTabla.fechaIngreso,
-          this.contactoTabla.estado,
+          this.estadoOptions.getEstadoId(this.contactoTabla.estado)[0].idEstado,
           this.contactoTabla.fechaEstado,
-          this.contactoTabla.EstadoDescrip
+          this.estadoOptions.getEstadoId(this.contactoTabla.estado)[0].descripcion
         );        
         this.contactoForm.controls['cidContacto'].setValue(this.contactoTabla.idContacto);
         this.contactoForm.controls['cnombre'].setValue(this.contactoTabla.nombre);
@@ -203,7 +199,7 @@ export class ContactoComponent implements OnInit {
   // convenience getter for easy access to form fields
   get f() { return this.contactoForm.controls; }
   onSubmit() {
-    console.log(this.eDOptions[this.selectedEstadoContactoId]);
+    console.log(this.contactoForm.controls['estado'].value);
 
       this.submitted = true;
 
@@ -234,6 +230,8 @@ export class ContactoComponent implements OnInit {
       );
   }
   private getDismissReason(reason: any): string {
+    console.log("ACA");
+
     if (reason === ModalDismissReasons.ESC) {
       return 'by pressing ESC';
     } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
@@ -244,9 +242,12 @@ export class ContactoComponent implements OnInit {
   }
 
   selectionChanged() {
+    console.log("ACA");
 
   }
   findImage(tipo: string) {
+    console.log("ACA");
+
     this.contactoService.getImage(this.contacto.idImagen + tipo).subscribe(
       data => {
         this.createImageFromBlob(data);

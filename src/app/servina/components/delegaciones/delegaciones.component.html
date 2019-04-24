@@ -14,7 +14,7 @@
             <tr>
               <td>
               <div class="form-group">
-                  <label class="titulos">Codigo</label>
+                  <label class="titulos" style="color: blue" >Delegacion</label>
                   <input type="text" formControlName="ccodigo" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.ccodigo.errors }" />
                   <div *ngIf="submitted && f.ccodigo.errors" class="invalid-feedback">
                       <div *ngIf="f.ccodigo.errors.required">Debe ingresar un Codigo</div>
@@ -68,14 +68,14 @@
             <tr>
               <td>
               <div class="form-group">
-                  <label class="titulos">Codigo</label>
-                  <input type="text" formControlName="cbcodigo" class="form-control"/>
+                  <label class="titulos" style="color: blue">Banco</label>
+                  <input type="text" formControlName="ccodigo" class="form-control"/>
               </div>
               </td>
               <td>
                 <div class="form-group">
                   <label class="titulos">Descripcion</label>
-                  <input type="text" formControlName="cbdescripcion" class="form-control"/>
+                  <input type="text" formControlName="cdescripcion" class="form-control"/>
                 </div>
               </td>
               <td>
@@ -92,21 +92,46 @@
                   <input type="text" formControlName="cdescripPrestacion" class="form-control"/>
               </div>
               </td>
-              <td>
+              <td colspan="2">
                 <div class="form-group">
                   <label class="titulos">Banco Recaudador</label>
                   <input type="text" formControlName="cbancoRecaudador" class="form-control"/>
                 </div>
-              </td>      
-              <td>
+              </td>
+<!--              <td>
                 <div class="form-group">
                   <button class="btn btn-success boton">Actualizar Banco</button>
                 </div>
-              </td>
+              </td>-->
             </tr>
           </table>
         </div>
       </form>
+      <hr/>
+      <div>
+          <table>
+              <tr>
+                <td>
+                  <label class="titulosGen">Dias de Cobro</label>
+                </td>
+                <td>
+                  <button class="btn btn-success boton" (click)="agregarDia()">Agregar Dia</button>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <ngb-datepicker [(ngModel)]="diaCobro"></ngb-datepicker>
+                </td>
+                <td>
+                  <ng2-smart-table 
+                      [settings]="setDdc"
+                      [source]="diasDeCobroTabla"
+                      (userRowSelect)="ddcRowSeleccionada($event)">
+                  </ng2-smart-table>
+                </td>  
+              </tr>
+          </table>
+      </div>
     </div>
   </div>
 </div>

@@ -5,6 +5,7 @@ import { catchError, map, tap } from 'rxjs/operators';
 import { of } from 'rxjs/observable/of';
 import { Delegacion } from '../model/delegacion';
 import { Banco } from '../model/banco';
+import { DiasCobro } from '../model/diasCobro';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -19,14 +20,20 @@ export class DelegacionService {
   
   private urlGetDelegacion: string = this.url + "/api/servina/delegacion/";
   private urlGetDelegaciones: string = this.url + "/api/servina/delegaciones";
-  private urlPutDelegacion: string = this.url + "/api/pepeya/delegacion";
+  private urlPutDelegacion: string = this.url + "/api/servina/delegacion";
   private idDelegacion: number;
-  private delegaciones: Delegacion;
-
+  private delegacion: Delegacion;
+0
   private urlGetBanco: string = this.url + "/api/servina/banco/";
   private urlGetBancos: string = this.url + "/api/servina/bancos";
-  private urlPutBanco: string = this.url + "/api/pepeya/banco";
+  private urlPutBanco: string = this.url + "/api/servina/banco";
   private idBanco: number;
+
+  private urlGetDiasCobro: string = this.url + "/api/servina/diasCobro/";   //idDelegacion
+  private urlPostDiasCobro: string = this.url + "/api/servina/diasCobro";
+  private urlDeleteDiasCobro: string = this.url + "/api/servina/diasCobro/"; //idDiasCobro
+  private idDiasCobro: number;
+  private diasCobro: DiasCobro;
 
   constructor( private httpClient: HttpClient ) {
   }
@@ -40,10 +47,48 @@ export class DelegacionService {
   public setDelegacionId(idDelegacion: number) {
     this.idDelegacion = idDelegacion;
   }
+  public putDelegacion(d: Delegacion): Observable<Delegacion> {
+    console.log(d);
+    this.delegacion = d;
+    return this.httpClient.put<Delegacion>(this.urlPutDelegacion, this.delegacion, httpOptions)
+    .pipe(
+      tap((d: Delegacion) => {
+        console.log("put exitoso " + d);
+      }),
+      catchError(this.handleError('putDelegacion', d))
+    );
+  }
+
   public getBancoId() {
     return this.httpClient.get(this.urlGetBanco + this.idBanco);
   }
   public setBancoId(idBanco: number) {
     this.idBanco = idBanco;
+  }
+
+  public getDiasCobroDelegacion() {
+    return this.httpClient.get(this.urlGetDiasCobro + this.idDelegacion);
+  }
+  public setDiasCobroId(idDiasCobro: number) {
+    this.idDiasCobro = idDiasCobro;
+  }
+  public postDiasCobro(fecha: String): Observable<DiasCobro> {
+    this.diasCobro = new DiasCobro(0, this.idDelegacion, fecha);
+    console.log(this.diasCobro);
+    return this.httpClient.post<DiasCobro>(this.urlPostDiasCobro, this.diasCobro, httpOptions)
+    .pipe(
+      tap((dc: DiasCobro) => {
+        console.log("post exitoso " + dc);
+      }),
+      catchError(this.handleError('postDiasCobro', this.diasCobro))
+    );
+  }
+
+  private handleError<T> (operation = 'operation', result?: T) {
+    return (error: any): Observable<T> => {
+      console.error(error); // log to console instead
+      console.log(`${operation} failed: ${error.message}`);
+      return of(result as T);
+    };
   }
 }
