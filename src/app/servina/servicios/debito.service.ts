@@ -5,7 +5,7 @@ import { Debito } from '../model/debito';
   
 @Injectable({providedIn: 'root'})
 export class DebitoService {
-    private baseUrl: string = "http://localhost:5000/api";
+    private baseUrl: string = "http://localhost:5000/api/servina";
 
     public deb: Debito;
     private debs: Debito[];

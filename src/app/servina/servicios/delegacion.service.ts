@@ -9,10 +9,11 @@ import { DiasCobro } from '../model/diasCobro';
 
 const httpOptions = {
   headers: new HttpHeaders({
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*'
   })
 };
-  
+
 @Injectable({providedIn: 'root'})
 export class DelegacionService {
   private urlGCP: string = "http://35.243.241.239:5000";
@@ -48,15 +49,21 @@ export class DelegacionService {
     this.idDelegacion = idDelegacion;
   }
   public putDelegacion(d: Delegacion): Observable<Delegacion> {
-    console.log(d);
     this.delegacion = d;
-    return this.httpClient.put<Delegacion>(this.urlPutDelegacion, this.delegacion, httpOptions)
-    .pipe(
+    let json = JSON.stringify(this.delegacion);
+    let params = "json="+json;
+    console.log(params);
+    return this.httpClient.put<Delegacion>(this.urlPutDelegacion, params, httpOptions);
+
+//    console.log(this.urlPutDelegacion);
+//    console.log(this.delegacion);
+//    return this.httpClient.put<Delegacion>(this.urlPutDelegacion, this.delegacion, httpOptions);
+/**    .pipe(
       tap((d: Delegacion) => {
         console.log("put exitoso " + d);
       }),
       catchError(this.handleError('putDelegacion', d))
-    );
+    ); */
   }
 
   public getBancoId() {
@@ -74,14 +81,13 @@ export class DelegacionService {
   }
   public postDiasCobro(fecha: String): Observable<DiasCobro> {
     this.diasCobro = new DiasCobro(0, this.idDelegacion, fecha);
-    console.log(this.diasCobro);
-    return this.httpClient.post<DiasCobro>(this.urlPostDiasCobro, this.diasCobro, httpOptions)
-    .pipe(
-      tap((dc: DiasCobro) => {
-        console.log("post exitoso " + dc);
-      }),
-      catchError(this.handleError('postDiasCobro', this.diasCobro))
-    );
+    return this.httpClient.post<DiasCobro>(this.urlPostDiasCobro, this.diasCobro, httpOptions);
+//    .pipe(
+//      tap((dc: DiasCobro) => {
+//        console.log("post exitoso " + dc);
+//      }),
+//      catchError(this.handleError('postDiasCobro', this.diasCobro))
+//    );
   }
 
   private handleError<T> (operation = 'operation', result?: T) {

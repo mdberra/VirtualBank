@@ -94,7 +94,7 @@ export class DelegacionesComponent implements OnInit {
     },
     columns: {
       idDiasCobro:  { title: 'Nro', width: '5%', filter: false},
-      fechaAlta: { title: 'Fecha', width: '80px', filter: false,
+      fechaDisparo: { title: 'Fecha', width: '80px', filter: false,
         valuePrepareFunction: (fechaAlta) => { //2019-01-14T14:29:30Z
           let anio = fechaAlta.substring(0,4);
           let mes  = fechaAlta.substring(5,7);
@@ -150,6 +150,9 @@ export class DelegacionesComponent implements OnInit {
         ccodigo: ['', Validators.required],
         cdescripcion: ['', Validators.required],
         cfechaAlta: ['', Validators.required],
+        cidLocalizacion: [''], 
+        cidEntidad: [''],
+        cidBanco: [''],
         delegEstado: ['']
       }, {
         //        validator: ValidarCbu('cbu')
@@ -185,12 +188,18 @@ export class DelegacionesComponent implements OnInit {
           this.tabla.codigo,
           this.tabla.descripcion,
           this.tabla.fechaAlta,
-          this.estadoOptions.getEstadoId(this.tabla.utilizar)[0].idEstado,
-          this.estadoOptions.getEstadoId(this.tabla.utilizar)[0].descripcion
+          this.tabla.idLocalizacion,
+          this.tabla.idEntidad,
+          this.tabla.idBanco,
+          this.estadoOptions.getEstadoId(this.tabla.utilizar)[0].idEstado
+//          this.estadoOptions.getEstadoId(this.tabla.utilizar)[0].descripcion
         );
         this.delegacionForm.controls['ccodigo'].setValue(this.delegacion.codigo);
         this.delegacionForm.controls['cdescripcion'].setValue(this.delegacion.descripcion);
         this.delegacionForm.controls['cfechaAlta'].setValue(this.changeFecha(this.tabla.fechaAlta));
+        this.delegacionForm.controls['cidLocalizacion'].setValue(this.delegacion.idLocalizacion);
+        this.delegacionForm.controls['cidEntidad'].setValue(this.delegacion.idEntidad);
+        this.delegacionForm.controls['cidBanco'].setValue(this.delegacion.idBanco);
         this.delegacionForm.controls['delegEstado'].setValue(this.estadoOptions.getEstadoId(this.delegacion.utilizar)[0].idEstado);
 // Banco
         this.delegacionService.setBancoId(this.tabla.idBanco);
@@ -213,18 +222,21 @@ export class DelegacionesComponent implements OnInit {
           err => {
             console.log('Error en DelegacionService.getBanco ' + ' Message: ' + err.message);
         });
-        this.delegacionService.getDiasCobroDelegacion().subscribe(
-          (response: Array<object>) => {
-            this.diasDeCobroTabla = response;
-          },
-          err => {
-            console.log('Error en DelegacionService.getDiasCobroDelegacion ' + ' Message: ' + err.message);
-        });
+        this.llenarTablaDiasCobro();
       },
       err => {
         console.log('Error en DelegacionService.getDelegaciones ' + ' Message: ' + err.message);
       }
     );
+  }
+  private llenarTablaDiasCobro() {
+    this.delegacionService.getDiasCobroDelegacion().subscribe(
+      (response: Array<object>) => {
+        this.diasDeCobroTabla = response;
+      },
+      err => {
+        console.log('Error en DelegacionService.getDiasCobroDelegacion ' + ' Message: ' + err.message);
+    });
   }
   private changeFecha(fecha: String) : String {
     let anio = fecha.substring(0,4);
@@ -244,41 +256,54 @@ export class DelegacionesComponent implements OnInit {
 
   // convenience getter for easy access to form fields
   get f() { return this.delegacionForm.controls; }
-  onSubmit() {
-      this.submitted = true;
-
-      // stop here if form is invalid
-      if (this.delegacionForm.invalid) {
-          return;
-      }
-      this.delegacion.codigo = this.delegacionForm.controls['ccodigo'].value;
-      this.delegacion.descripcion = this.delegacionForm.controls['cdescripcion'].value;
-
-      this.delegacion.utilizar = ((this.delegacionForm.controls['delegEstado'].value));
-      this.delegacion.estadoDescrip = this.estadoOptions.getEstadoId(this.delegacionForm.controls['delegEstado'].value)[0].descripcion;
-      this.delegacionService.putDelegacion(this.delegacion).subscribe(
-        response => {
-          this.resultado = "Actualización exitosa";
-          this.llenarTabla();
-        }, err => {
-          this.resultado = err.message;
-        }
-      );
-  }
-  agregarDia() {
-//    this.diaCobro = this.calendar.getToday();
-    var fecha = new Date(this.diaCobro.year, this.diaCobro.month-1, this.diaCobro.day);
-    console.log(fecha);
-    console.log(fecha.toString());
-    this.delegacionService.postDiasCobro(fecha.toString()).subscribe(
+  actualizarDelegacion() {
+    this.submitted = true;
+    if (this.delegacionForm.invalid) {
+        return;
+    }
+    this.delegacion.codigo = this.delegacionForm.controls['ccodigo'].value;
+    this.delegacion.descripcion = this.delegacionForm.controls['cdescripcion'].value;
+    this.delegacion.idLocalizacion = this.delegacionForm.controls['cidLocalizacion'].value;
+    this.delegacion.idEntidad = this.delegacionForm.controls['cidEntidad'].value;
+    this.delegacion.idBanco = this.delegacionForm.controls['cidBanco'].value;
+    this.delegacion.utilizar = ((this.delegacionForm.controls['delegEstado'].value));
+//    this.delegacion.estadoDescrip = this.estadoOptions.getEstadoId(this.delegacionForm.controls['delegEstado'].value)[0].descripcion;
+    this.delegacionService.putDelegacion(this.delegacion);
+/**    .subscribe(
       response => {
         this.resultado = "Actualización exitosa";
         this.llenarTabla();
       }, err => {
         this.resultado = err.message;
       }
+    );  */
+  }
+  agregarDia() {
+//    this.diaCobro = this.calendar.getToday();
+    var fecha = this.changeFechaGo(this.diaCobro.year, this.diaCobro.month, this.diaCobro.day);
+    this.delegacionService.postDiasCobro(fecha).subscribe(
+      response => {
+        this.resultado = "Actualización exitosa";
+        this.llenarTablaDiasCobro();
+      }, err => {
+        this.resultado = err.message;
+      }
     );
-
+  }
+  private changeFechaGo(year: number, month: number, day: number) : String {
+    var mes: String 
+    var dia: String
+    if(month < 10) {
+      mes = new String("0"+ month);
+    } else {
+      mes = new String(month);
+    }
+    if(day < 10) {
+      dia = new String("0"+day);
+    } else {
+      dia = new String(day);
+    }
+    return new String(year + "-" + mes + "-" + dia + "T00:00:00Z");
   }
   ddcRowSeleccionada(event) {
     if(event.isSelected) {

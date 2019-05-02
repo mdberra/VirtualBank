@@ -4,8 +4,11 @@ export class Delegacion {
       public codigo: string,
       public descripcion: string,
       public fechaAlta: Date,
-      public utilizar: number,
-      public estadoDescrip: string
+      public idLocalizacion: number,
+      public idEntidad: number,
+      public idBanco: number,
+      public utilizar: number
+//      public estadoDescrip: string
    ) {
    }
 }
