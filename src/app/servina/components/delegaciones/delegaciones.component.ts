@@ -80,17 +80,19 @@ export class DelegacionesComponent implements OnInit {
       class: 'table table-striped table-hover'
     }
   };
-
   diaCobro: NgbDateStruct;
   diasDeCobroTabla: Array<object> = [];
   diasCobro: DiasCobro;
   setDdc = {
     actions: {
-      columnTitle: "Acciones",
+      columnTitle: "",
       add: false,
       edit: false,
       delete: false,
-      position: "right"
+      position: "right",
+      custom: [
+        {name: 'eliminar', title: 'Eliminar', width: '30px'}
+      ]
     },
     columns: {
       idDiasCobro:  { title: 'Nro', width: '5%', filter: false},
@@ -103,14 +105,6 @@ export class DelegacionesComponent implements OnInit {
           return fecha;
         }
       }
-/**       acciones: { title: 'Acciones', filter: false, width: '65px', type: 'custom',
-                renderComponent: ButtonViewComponent,
-                (instance) {
-                  instance.save.subscribe(row => {
-                    alert('Apretando botones');
-                  });
-                }
-      } */
     },
     pager: {
       display: true,
@@ -268,15 +262,15 @@ export class DelegacionesComponent implements OnInit {
     this.delegacion.idBanco = this.delegacionForm.controls['cidBanco'].value;
     this.delegacion.utilizar = ((this.delegacionForm.controls['delegEstado'].value));
 //    this.delegacion.estadoDescrip = this.estadoOptions.getEstadoId(this.delegacionForm.controls['delegEstado'].value)[0].descripcion;
-    this.delegacionService.putDelegacion(this.delegacion);
-/**    .subscribe(
+    this.delegacionService.putDelegacion(this.delegacion).subscribe(
       response => {
         this.resultado = "Actualización exitosa";
         this.llenarTabla();
+        this.getDelegacionView(this.delegacion.idDelegacion);
       }, err => {
         this.resultado = err.message;
       }
-    );  */
+    );
   }
   agregarDia() {
 //    this.diaCobro = this.calendar.getToday();
@@ -309,6 +303,17 @@ export class DelegacionesComponent implements OnInit {
     if(event.isSelected) {
       console.log((event.data['fecha']));
     }
+  }
+  onCustom(event) {
+//    console.log(event.data.idDiasCobro);
+    this.delegacionService.deleteDiasCobro(event.data.idDiasCobro).subscribe(
+      response => {
+        this.resultado = "Actualización exitosa";
+        this.llenarTablaDiasCobro();
+      }, err => {
+        this.resultado = err.message;
+      }
+    );
   }
   private getDismissReason(reason: any): string {
     if (reason === ModalDismissReasons.ESC) {

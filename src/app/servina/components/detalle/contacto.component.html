@@ -8,7 +8,7 @@
             </ng2-smart-table>
         </div>
         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-            <form [formGroup]="contactoForm" (ngSubmit)="onSubmit()">
+            <form [formGroup]="contactoForm">
                 <div>
                     <table class="datosContacto">
                         <tr>
@@ -124,10 +124,9 @@
                             </div>
                         </div>
                         </td> 
-
                         <td>
                             <div>
-                                <button class="btn btn-success boton" style="height: 70px;" >Actualizar Datos</button>
+                                <button class="btn btn-success boton" style="height: 70px;" (click)="actualizarDatos()">Actualizar Datos</button>
                             </div>
                         </td>
                         </tr>

@@ -1,0 +1,40 @@
+.titulosGen{
+   font-size: 15px;
+   color: blue;
+}
+.datosCliente {
+   margin-top: 7px;
+   font-size: 15px;
+}
+.boton {
+   margin-left: 20px;
+   height: 60px;
+   color: green;
+   background-color: aliceblue;
+}
+.botoncolor{
+   background-color: aqua;
+}
+.titulos{
+   color: green;
+}
+.columna1{
+    width: 200px;
+ }
+.columna2{
+    width: 300px;
+}
+.columna3{
+    width: 300px;
+}
+.resultado {
+   font-size: 15px;
+   color: blue;
+}
+.overflow-box {
+   width: 300px;
+   padding: 5px;
+   height: 100px;
+   border: 1px solid #999;
+   overflow: hidden;
+}

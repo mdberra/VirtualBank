@@ -41,15 +41,8 @@ export class ContactoService {
   public setContactoId(idContacto: number) {
     this.idContacto = idContacto;
   }
-  public putContacto(_contacto: Contacto): Observable<Contacto> {
-    this.contacto = _contacto;
-    return this.httpClient.put<Contacto>(this.urlPutContacto, this.contacto, httpOptions)
-    .pipe(
-      tap((_contacto: Contacto) => {
-        console.log("put exitoso " + _contacto);
-      }),
-      catchError(this.handleError('putContacto', _contacto))
-    );
+  public putContacto(c: Contacto): Observable<Contacto> {
+    return this.httpClient.put<Contacto>(this.urlPutContacto, c, httpOptions);
   }
 
   public getImage(fileName: string) : Observable<Blob> {

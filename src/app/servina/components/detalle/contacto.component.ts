@@ -170,7 +170,7 @@ export class ContactoComponent implements OnInit {
         this.contactoForm.controls['ccbu'].setValue(this.contactoTabla.cbu);
         this.contactoForm.controls['cidImagen'].setValue(this.contactoTabla.idImagen);
         this.contactoForm.controls['cfechaIngreso'].setValue(this.changeFecha(this.contactoTabla.fechaIngreso));
-        this.contactoForm.controls['cestado'].setValue(this.contactoTabla.estado);
+        this.contactoForm.controls['cestado'].setValue(this.estadoOptions.getEstadoId(this.contactoTabla.estado)[0].idEstado);
         this.contactoForm.controls['cfechaEstado'].setValue(this.contactoTabla.fechaEstado);
         this.contactoForm.controls['cestadoDescrip'].setValue(this.contactoTabla.estadoDescrip);
         this.selectedEstadoContactoId = this.contactoTabla.estado;
@@ -198,8 +198,8 @@ export class ContactoComponent implements OnInit {
 
   // convenience getter for easy access to form fields
   get f() { return this.contactoForm.controls; }
-  onSubmit() {
-    console.log(this.contactoForm.controls['estado'].value);
+  actualizarDatos() {
+//    console.log(this.contactoForm.controls['estado'].value);
 
       this.submitted = true;
 
@@ -216,7 +216,7 @@ export class ContactoComponent implements OnInit {
       this.contacto.plazo = Number(this.contactoForm.controls['cplazo'].value);
       this.contacto.mensaje = this.contactoForm.controls['cmensaje'].value;
       this.contacto.cbu = this.contactoForm.controls['ccbu'].value;
-
+      this.contacto.estado = ((this.contactoForm.controls['cestado'].value));
       console.log(this.contacto);
 
       this.contactoService.putContacto(this.contacto).subscribe(

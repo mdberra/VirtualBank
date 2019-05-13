@@ -8,7 +8,7 @@
       </ng2-smart-table>
     </div>
     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-      <form [formGroup]="delegacionForm" (ngSubmit)="onSubmit()">
+      <form [formGroup]="delegacionForm">
         <div>
           <table class="datosDelegacion">
             <tr>
@@ -126,7 +126,8 @@
                   <ng2-smart-table 
                       [settings]="setDdc"
                       [source]="diasDeCobroTabla"
-                      (userRowSelect)="ddcRowSeleccionada($event)">
+                      (userRowSelect)="ddcRowSeleccionada($event)"
+                      (custom)="onCustom($event)">
                   </ng2-smart-table>
                 </td>  
               </tr>

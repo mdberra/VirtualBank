@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders} from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
 import { of } from 'rxjs/observable/of';
 import { Delegacion } from '../model/delegacion';
 import { Banco } from '../model/banco';
@@ -9,8 +8,7 @@ import { DiasCobro } from '../model/diasCobro';
 
 const httpOptions = {
   headers: new HttpHeaders({
-    'Content-Type': 'application/json',
-    'Access-Control-Allow-Origin': '*'
+    'Content-Type': 'application/json'
   })
 };
 
@@ -33,6 +31,7 @@ export class DelegacionService {
   private urlGetDiasCobro: string = this.url + "/api/servina/diasCobro/";   //idDelegacion
   private urlPostDiasCobro: string = this.url + "/api/servina/diasCobro";
   private urlDeleteDiasCobro: string = this.url + "/api/servina/diasCobro/"; //idDiasCobro
+  private urlDelDiasCobro: string = this.url + "/api/servina/diasCobro/"; //idDiasCobro
   private idDiasCobro: number;
   private diasCobro: DiasCobro;
 
@@ -49,23 +48,8 @@ export class DelegacionService {
     this.idDelegacion = idDelegacion;
   }
   public putDelegacion(d: Delegacion): Observable<Delegacion> {
-    this.delegacion = d;
-    let json = JSON.stringify(this.delegacion);
-    let params = "json="+json;
-    console.log(params);
-    return this.httpClient.put<Delegacion>(this.urlPutDelegacion, params, httpOptions);
-
-//    console.log(this.urlPutDelegacion);
-//    console.log(this.delegacion);
-//    return this.httpClient.put<Delegacion>(this.urlPutDelegacion, this.delegacion, httpOptions);
-/**    .pipe(
-      tap((d: Delegacion) => {
-        console.log("put exitoso " + d);
-      }),
-      catchError(this.handleError('putDelegacion', d))
-    ); */
+    return this.httpClient.put<Delegacion>(this.urlPutDelegacion, d, httpOptions);
   }
-
   public getBancoId() {
     return this.httpClient.get(this.urlGetBanco + this.idBanco);
   }
@@ -88,6 +72,10 @@ export class DelegacionService {
 //      }),
 //      catchError(this.handleError('postDiasCobro', this.diasCobro))
 //    );
+  }
+  public deleteDiasCobro(id: number) {
+    console.log(id);
+    return this.httpClient.delete<DiasCobro>(this.urlDelDiasCobro + id, httpOptions);
   }
 
   private handleError<T> (operation = 'operation', result?: T) {

@@ -16,9 +16,11 @@ import { AppComponent } from './app.component';
 import { NavbarComponent } from './servina/components/navbar/navbar.component';
 import { ContactoComponent } from './servina/components/detalle/contacto.component';
 import { ClientesComponent } from './servina/components/clientes/clientes.component';
+import { ClientesNewComponent } from './servina/components/clientesNew/clientesNew.component';
 import { ButtonViewComponent } from './servina/components/clientes/ButtonViewComponent';
 import { MovimientosComponent } from './servina/components/movimientos/movimientos.component';
 import { DelegacionesComponent } from './servina/components/delegaciones/delegaciones.component';
+import { DelegacionesNewComponent } from './servina/components/delegacionesNew/delegacionesNew.component';
 
 // Services
 import { ContactoService } from './servina/servicios/contacto.service';
@@ -41,9 +43,11 @@ import { ServicioPipe } from './servina/pipes/servicio.pipe';
     ServicioPipe,
     ContactoComponent,
     ClientesComponent,
+    ClientesNewComponent,
     ButtonViewComponent,
     MovimientosComponent,
-    DelegacionesComponent
+    DelegacionesComponent,
+    DelegacionesNewComponent
   ],
   imports: [
     BrowserModule,

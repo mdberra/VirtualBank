@@ -19,6 +19,14 @@
    padding-top: 10px;
    color: rgb(255,250,254);
 }
+.items2 {
+   text-align: right;
+   vertical-align: center;
+   font-size: 15px;
+   padding-left: 15px;
+   padding-top: 10px;
+   color: rgb(255,250,254);
+}
 .badd {
    vertical-align: center;
    color: rgb(255,250,254);

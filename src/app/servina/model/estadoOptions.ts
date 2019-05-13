@@ -12,6 +12,11 @@ export class EstadoOptions {
             this.estados.push(new Estado(Number(kv['idEstado']), kv['descripcion']));
         }
     }
+    setDelegKV(keyvalues: Array<object> = []) : void {
+        for(let kv of keyvalues) {
+            this.estados.push(new Estado(Number(kv['idDelegacion']), kv['descripcion']));
+        }
+    }
     getEstados() : Estado[] {
         return this.estados;
     }

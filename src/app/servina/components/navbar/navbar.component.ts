@@ -31,7 +31,13 @@ export class NavbarComponent implements OnInit {
   clientes() {
     this.router.navigate(['/cliente']);
   }
+  clientesNew() {
+    this.router.navigate(['/clienteNew']);
+  }
   delegaciones() {
     this.router.navigate(['/delegaciones']);
+  }
+  delegacionesNew() {
+    this.router.navigate(['/delegacionesNew']);
   }
 }

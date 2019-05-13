@@ -1,0 +1,121 @@
+<div class="container-fluid">
+  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+    <form [formGroup]="clienteForm">
+      <div>
+        <table class="datosCliente">
+          <tr>
+            <td>
+            <div class="form-group columna1">
+                <label class="titulos" style="color: blue" >Id</label>
+                <input type="text" formControlName="cidCliente" class="form-control"/>
+            </div>
+            </td>
+            <td>
+            <div class="form-group columna2">
+                <label class="titulos">Nombre</label>
+                <input type="text" formControlName="cNombre" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.cNombre.errors }" />
+                <div *ngIf="submitted && f.cNombre.errors" class="invalid-feedback">
+                    <div *ngIf="f.cNombre.errors.required">Debe ingresar un Nombre</div>
+                </div>
+            </div>
+            </td>
+            <td>
+            <div class="form-group columna3">
+                <label class="titulos">Apellido</label>
+                <input type="text" formControlName="cApellido" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.cApellido.errors }" />
+                <div *ngIf="submitted && f.cApellido.errors" class="invalid-feedback">
+                    <div *ngIf="f.cApellido.errors.required">Debe ingresar un Apellido</div>
+                </div>
+            </div>
+            </td>
+          </tr>
+          <tr>
+              <td>
+              <div class="form-group columna1">  
+                <label class="titulos" for="cTipoDoc">Tipo Documento</label>
+                <input type="text" formControlName="cTipoDoc" class="form-control"/>
+<!--                <div class="selector">
+                  <ng-select id="cTipoDoc" formControlName="cTipoDoc" class="form-control"
+                    [items]="optionsTipoDoc"
+                    bindLabel="descripcion"
+                    bindValue="idTipoDoc"
+                    [clearable]="false"
+                    [virtualScroll]="true">
+                  </ng-select>
+                </div>-->
+              </div>
+            </td>
+            <td>
+            <div class="form-group columna2">
+                <label class="titulos">Nro Documento</label>
+                <input type="text" formControlName="cNroDoc" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.cNroDoc.errors }" />
+                <div *ngIf="submitted && f.cNroDoc.errors" class="invalid-feedback">
+                    <div *ngIf="f.cNroDoc.errors.required">Debe ingresar un Nro de Documento</div>
+                </div>
+            </div>
+            </td>
+            <td>
+             <div class="form-group columna3">
+                <label class="titulos">CBU</label>
+                <input type="text" formControlName="cCbu" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.cCbu.errors }" />
+                <div *ngIf="submitted && f.cCbu.errors" class="invalid-feedback">
+                    <div *ngIf="f.cCbu.errors.required">Debe ingresar un CBU</div>
+                </div>
+            </div>
+            </td>
+          </tr>
+          <tr>
+           <td>
+             <div class="form-group columna1">
+                <label class="titulos">Caja de Ahorro Sucursal</label>
+                <input type="text" formControlName="cCaSucursal" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.cCaSucursal.errors }" />
+                <div *ngIf="submitted && f.cCaSucursal.errors" class="invalid-feedback">
+                    <div *ngIf="f.cCaSucursal.errors.required">Debe ingresar un nro de Sucursal de Caja de Ahorro</div>
+                </div>
+            </div>
+            </td>
+            <td>
+             <div class="form-group columna2">
+                <label class="titulos">Caja de Ahorro Nro</label>
+                <input type="text" formControlName="cCaNro" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.cCaNro.errors }" />
+                <div *ngIf="submitted && f.cCaNro.errors" class="invalid-feedback">
+                    <div *ngIf="f.cCaNro.errors.required">Debe ingresar un nro de Caja de Ahorro</div>
+                </div>
+            </div>
+            </td>
+            <td>
+              <div class="form-group columna3">  
+                <label class="titulos" for="cIdDelegacion">Delegacion</label>
+                <div class="selector">
+                  <ng-select id="cIdDelegacion" formControlName="cIdDelegacion" class="form-control"
+                    [items]="optionsDeleg"
+                    bindLabel="descripcion"
+                    bindValue="idEstado"
+                    [clearable]="false"
+                    [virtualScroll]="true">
+                  </ng-select>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2">
+              <div class="form-group">
+                  <label class="titulos">Comentarios</label>
+                  <textarea rows="3" cols="70" formControlName="cComentarios" class="form-control"></textarea>
+              </div>
+            </td>
+<!--
+            cIdLocParticular: [''],
+            cIdLocLaboral: [''],
+            cIdLocInformado: [''],
+   -->         
+            <td>
+              <button class="btn btn-success boton" (click)="actualizarCliente()">Actualizar Cliente</button>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </form>
+  </div>
+</div>
