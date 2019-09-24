@@ -8,13 +8,13 @@ export class Cliente {
         public caNro: string,
         public nombre: string,
         public apellido: string,
-        public fechaIngreso: string,
+        public fechaIngreso: Date,
         public idLocParticular: number,
         public idLocLaboral: number,
         public idLocInformado: number,
         public idDelegacion: number,
         public estado: number,
-        public fechaEstado: string,
+        public fechaEstado: Date,
         public comentarios: string
     ) {
    }

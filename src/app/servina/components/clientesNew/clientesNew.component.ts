@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { NgbDateStruct, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
+import { Router, ActivatedRoute } from '@angular/router';
 import { EstadoOptions } from '../../model/estadoOptions';
 import { FechaPipe } from '../../pipes/fecha.pipe';
 import { Cliente } from '../../model/cliente';
@@ -15,6 +16,7 @@ import { ContactoService } from '../../servicios/contacto.service';
   styleUrls: ['./clientesNew.component.css']
 })
 export class ClientesNewComponent implements OnInit {
+  fechaNow: Date = new Date();
   keyvalues: Array<object> = [];
   estadoOptions = new EstadoOptions();
   cliente: Cliente;
@@ -26,6 +28,7 @@ export class ClientesNewComponent implements OnInit {
   resultado: string;
 
   constructor(
+    private route: ActivatedRoute,
     private formBuilder: FormBuilder,
     private clienteService: ClienteService,
     private delegacionService: DelegacionService
@@ -63,8 +66,13 @@ export class ClientesNewComponent implements OnInit {
       }, {
         //        validator: ValidarCbu('cbu')
       });
-      this.cliente = new Cliente(0, "D.N.I.", 0, "", "", "", "", "", "", 0, 0, 0, 0, 0, "", "");
-      this.poblar();  
+    this.route.params.subscribe((params) => this.cliente.idCliente = params.idCliente);
+    if(this.cliente.idCliente == 0) {
+      this.cliente = new Cliente(0, "D.N.I.", 0, "", "", "", "", "", this.fechaNow, 1, 1, 1, 0, 0, this.fechaNow, "");
+      this.poblar();
+    } else {
+      this.geClienteView(this.cliente.idCliente);
+    }
   }
   private poblar() {
     this.clienteForm.controls['cidCliente'].disable();
@@ -118,7 +126,7 @@ export class ClientesNewComponent implements OnInit {
         this.clienteForm.controls['cCaNro'].setValue(this.cliente.caNro);
         this.clienteForm.controls['cNombre'].setValue(this.cliente.nombre);
         this.clienteForm.controls['cApellido'].setValue(this.cliente.apellido);
-  //     this.clienteForm.controls['cFIngreso'].setValue(this.changeFecha(this.cliente.F_INGRESO));
+        this.clienteForm.controls['cFIngreso'].setValue(this.changeFecha(String(this.cliente.fechaIngreso)));
         this.clienteForm.controls['cIdLocParticular'].setValue(this.cliente.idLocParticular);
         this.clienteForm.controls['cIdLocLaboral'].setValue(this.cliente.idLocLaboral);
         this.clienteForm.controls['cIdLocInformado'].setValue(this.cliente.idLocInformado);
@@ -134,6 +142,15 @@ export class ClientesNewComponent implements OnInit {
       }
     );
   }
+  private changeFecha(fecha: String) : String {
+    let anio = fecha.substring(0,4);
+    let mes  = fecha.substring(5,7);
+    let dia  = fecha.substring(8,10);
+    let hora = fecha.substring(11,13);
+    let minuto = fecha.substring(14,16);
+    let segundo = fecha.substring(17,19);
+    return new String(dia + "/" + mes + "/" + anio + " " + hora + ":" + minuto + ":" + segundo) ;
+  }
 
   get f() { return this.clienteForm.controls; }
   actualizarCliente() {
@@ -148,14 +165,15 @@ export class ClientesNewComponent implements OnInit {
     this.cliente.caNro = this.clienteForm.controls['cCaNro'].value;
     this.cliente.nombre = this.clienteForm.controls['cNombre'].value;
     this.cliente.apellido = this.clienteForm.controls['cApellido'].value;
+    this.cliente.fechaIngreso = this.clienteForm.controls['cFIngreso'].value;
     this.cliente.idLocParticular = Number(this.clienteForm.controls['cIdLocParticular'].value);
     this.cliente.idLocLaboral = Number(this.clienteForm.controls['cIdLocLaboral'].value);
     this.cliente.idLocInformado = Number(this.clienteForm.controls['cIdLocInformado'].value);
-    this.cliente.idDelegacion = Number(this.clienteForm.controls['cIdDelegacion'].value); // this.optionsDeleg.getEstadoId(this.clienteForm.controls['cIdDelegacion'].value)[0].idEstado;
+    this.cliente.idDelegacion = Number(this.clienteForm.controls['cIdDelegacion'].value);
     this.cliente.estado = Number(this.clienteForm.controls['cEstado'].value);
     this.cliente.fechaEstado = this.clienteForm.controls['cFEstado'].value;
     this.cliente.comentarios = this.clienteForm.controls['cComentarios'].value;
-    
+
     this.clienteService.postCliente(this.cliente).subscribe(
       response => {
         console.log(response);

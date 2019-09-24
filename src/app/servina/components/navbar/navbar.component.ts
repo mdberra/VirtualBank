@@ -29,7 +29,7 @@ export class NavbarComponent implements OnInit {
     this.router.navigate(['/contacto']);
   }
   clientes() {
-    this.router.navigate(['/cliente']);
+    this.router.navigate(['/cliente', 0]);
   }
   clientesNew() {
     this.router.navigate(['/clienteNew']);
@@ -39,5 +39,8 @@ export class NavbarComponent implements OnInit {
   }
   delegacionesNew() {
     this.router.navigate(['/delegacionesNew']);
+  }
+  analisis() {
+    this.router.navigate(['/analisis']);
   }
 }

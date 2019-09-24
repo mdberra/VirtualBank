@@ -3,6 +3,8 @@ import { NgModule, LOCALE_ID } from '@angular/core';
 import { NgbModule, NgbCarouselConfig } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
+import { ChartsModule } from 'ng2-charts';
+
 import { HttpClientModule } from '@angular/common/http';
 import { AngularFontAwesomeModule } from 'angular-font-awesome';
 import { DataTableModule } from 'angular-6-datatable';
@@ -21,6 +23,7 @@ import { ButtonViewComponent } from './servina/components/clientes/ButtonViewCom
 import { MovimientosComponent } from './servina/components/movimientos/movimientos.component';
 import { DelegacionesComponent } from './servina/components/delegaciones/delegaciones.component';
 import { DelegacionesNewComponent } from './servina/components/delegacionesNew/delegacionesNew.component';
+import { AnalisisComponent } from './servina/components/analisis/analisis.component';
 
 // Services
 import { ContactoService } from './servina/servicios/contacto.service';
@@ -47,13 +50,15 @@ import { ServicioPipe } from './servina/pipes/servicio.pipe';
     ButtonViewComponent,
     MovimientosComponent,
     DelegacionesComponent,
-    DelegacionesNewComponent
+    DelegacionesNewComponent,
+    AnalisisComponent
   ],
   imports: [
     BrowserModule,
     NgbModule,
     FormsModule,
     ReactiveFormsModule,
+    ChartsModule,
     APP_ROUTING,
     HttpClientModule,
     Ng2SmartTableModule,

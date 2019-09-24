@@ -1,5 +1,6 @@
 <ng2-smart-table 
     [settings]="settings" 
     [source]="clientes"
-    (userRowSelect)="userRowSeleccionada($event)">
+    (userRowSelect)="userRowSeleccionada($event)"
+    (custom)="onCustom($event)">
 </ng2-smart-table>

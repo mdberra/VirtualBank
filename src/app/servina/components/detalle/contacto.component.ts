@@ -230,7 +230,7 @@ export class ContactoComponent implements OnInit {
       );
   }
   private getDismissReason(reason: any): string {
-    console.log("ACA");
+//    console.log("ACA");
 
     if (reason === ModalDismissReasons.ESC) {
       return 'by pressing ESC';
@@ -242,11 +242,11 @@ export class ContactoComponent implements OnInit {
   }
 
   selectionChanged() {
-    console.log("ACA");
+//    console.log("ACA");
 
   }
   findImage(tipo: string) {
-    console.log("ACA");
+//    console.log("ACA");
 
     this.contactoService.getImage(this.contacto.idImagen + tipo).subscribe(
       data => {
